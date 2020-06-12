@@ -12,28 +12,9 @@
 <script type="application/ld+json">
 {"url":"http://localhost:4000/","headline":"Home","@type":"WebSite","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><!-- Enables MathJax 
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
-  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
-    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
-  });
-});
-</script>-->
-<script>
-MathJax = {
-  tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
-  },
-  svg: {
-    fontCache: 'global'
-  }
-};
-</script>
-<script type="text/javascript" id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
-</script></head>
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.css" integrity="sha384-yFRtMMDnQtDRO8rLpMIKrtPCD5jdktao2TV19YiZYWMDkUR5GQZR/NOVTdquEx1j" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/katex.min.js" integrity="sha384-9Nhn55MVVN0/4OFx7EE5kpFBPsEMZxKTCnA+4fqDmg12eCTqGi6+BB2LjY8brQxJ" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script></head>
 <body><header class="site-header">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/"></a><nav class="site-nav">
@@ -55,7 +36,7 @@ MathJax = {
   
     <li>
       <a href="/2000/01/01/test.html" style="font-size: 30px">Welcome to Jekyll!</a>
-      <p><strong>Hello world</strong>, this is my first Jekyll blog post. Testing some math:</p>
+      <p><strong>Hello world</strong>, this is my first Jekyll blog post. Testing some math using KaTeX:</p>
 
 <div class="kdmath">$$
 \begin{aligned}
