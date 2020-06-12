@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-11T20:32:27-07:00</updated><id>http://localhost:4000/feed.xml</id><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/2000/01/01/test.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2000-01-01T00:00:00-08:00</published><updated>2000-01-01T00:00:00-08:00</updated><id>http://localhost:4000/2000/01/01/test</id><content type="html" xml:base="http://localhost:4000/2000/01/01/test.html">&lt;h1 id=&quot;post-title&quot;&gt;Post title&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Hello world&lt;/strong&gt;, this is my first Jekyll blog post. Testing some math:&lt;/p&gt;
+
+&lt;script type=&quot;math/tex; mode=display&quot;&gt;% &lt;![CDATA[
+\begin{aligned}
+  &amp; \phi(x,y) = \phi \left(\sum_{i=1}^n x_ie_i, \sum_{j=1}^n y_je_j \right)
+  = \sum_{i=1}^n \sum_{j=1}^n x_i y_j \phi(e_i, e_j) = \\
+  &amp; (x_1, \ldots, x_n) \left( \begin{array}{ccc}
+      \phi(e_1, e_1) &amp; \cdots &amp; \phi(e_1, e_n) \\
+      \vdots &amp; \ddots &amp; \vdots \\
+      \phi(e_n, e_1) &amp; \cdots &amp; \phi(e_n, e_n)
+    \end{array} \right)
+  \left( \begin{array}{c}
+      y_1 \\
+      \vdots \\
+      y_n
+    \end{array} \right)
+\end{aligned} %]]&gt;&lt;/script&gt;
+
+&lt;p&gt;Inline &lt;script type=&quot;math/tex&quot;&gt;f(x)=5&lt;/script&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">Post title</summary></entry></feed>

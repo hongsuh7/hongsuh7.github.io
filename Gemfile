@@ -5,5 +5,6 @@ source "https://rubygems.org"
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
 gem 'jekyll'
-gem 'jekyll-theme-cayman'
+gem "minima", github: "jekyll/minima"
+gem 'kramdown'
 # gem "rails"
