@@ -7,16 +7,16 @@
 <meta name="generator" content="Jekyll v3.8.7" />
 <meta property="og:title" content="Welcome to Jekyll!" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows." />
-<meta property="og:description" content="Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows." />
+<meta name="description" content="Hello world, this is my first Jekyll blog post. Testing some math: $$ \begin{aligned} &amp; \phi(x,y) = \phi \left(\sum_{i=1}^n x_ie_i, \sum_{j=1}^n y_je_j \right) = \sum_{i=1}^n \sum_{j=1}^n x_i y_j \phi(e_i, e_j) = \\ &amp; (x_1, \ldots, x_n) \left( \begin{array}{ccc} \phi(e_1, e_1) &amp; \cdots &amp; \phi(e_1, e_n) \\ \vdots &amp; \ddots &amp; \vdots \\ \phi(e_n, e_1) &amp; \cdots &amp; \phi(e_n, e_n) \end{array} \right) \left( \begin{array}{c} y_1 \\ \vdots \\ y_n \end{array} \right) \end{aligned} $$ The excerpt ends here. Some math follows." />
+<meta property="og:description" content="Hello world, this is my first Jekyll blog post. Testing some math: $$ \begin{aligned} &amp; \phi(x,y) = \phi \left(\sum_{i=1}^n x_ie_i, \sum_{j=1}^n y_je_j \right) = \sum_{i=1}^n \sum_{j=1}^n x_i y_j \phi(e_i, e_j) = \\ &amp; (x_1, \ldots, x_n) \left( \begin{array}{ccc} \phi(e_1, e_1) &amp; \cdots &amp; \phi(e_1, e_n) \\ \vdots &amp; \ddots &amp; \vdots \\ \phi(e_n, e_1) &amp; \cdots &amp; \phi(e_n, e_n) \end{array} \right) \left( \begin{array}{c} y_1 \\ \vdots \\ y_n \end{array} \right) \end{aligned} $$ The excerpt ends here. Some math follows." />
 <link rel="canonical" href="http://localhost:4000/2000/01/01/test.html" />
 <meta property="og:url" content="http://localhost:4000/2000/01/01/test.html" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2000-01-01T00:00:00-08:00" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/2000/01/01/test.html","headline":"Welcome to Jekyll!","dateModified":"2000-01-01T00:00:00-08:00","datePublished":"2000-01-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2000/01/01/test.html"},"description":"Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/2000/01/01/test.html","headline":"Welcome to Jekyll!","datePublished":"2000-01-01T00:00:00-08:00","dateModified":"2000-01-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2000/01/01/test.html"},"description":"Hello world, this is my first Jekyll blog post. Testing some math: $$ \\begin{aligned} &amp; \\phi(x,y) = \\phi \\left(\\sum_{i=1}^n x_ie_i, \\sum_{j=1}^n y_je_j \\right) = \\sum_{i=1}^n \\sum_{j=1}^n x_i y_j \\phi(e_i, e_j) = \\\\ &amp; (x_1, \\ldots, x_n) \\left( \\begin{array}{ccc} \\phi(e_1, e_1) &amp; \\cdots &amp; \\phi(e_1, e_n) \\\\ \\vdots &amp; \\ddots &amp; \\vdots \\\\ \\phi(e_n, e_1) &amp; \\cdots &amp; \\phi(e_n, e_n) \\end{array} \\right) \\left( \\begin{array}{c} y_1 \\\\ \\vdots \\\\ y_n \\end{array} \\right) \\end{aligned} $$ The excerpt ends here. Some math follows.","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><!-- Enables MathJax -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><!-- Enables MathJax 
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
 <script type="text/x-mathjax-config">
 MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
@@ -24,8 +24,20 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
     data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
   });
 });
+</script>-->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
 </script>
-<script type="text/javascript" id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script></head>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
 <body><header class="site-header">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/"></a><nav class="site-nav">
@@ -55,7 +67,7 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
   <div class="post-content e-content" itemprop="articleBody">
     <p><strong>Hello world</strong>, this is my first Jekyll blog post. Testing some math:</p>
 
-<script type="math/tex; mode=display">% <![CDATA[
+<div class="kdmath">$$
 \begin{aligned}
   & \phi(x,y) = \phi \left(\sum_{i=1}^n x_ie_i, \sum_{j=1}^n y_je_j \right)
   = \sum_{i=1}^n \sum_{j=1}^n x_i y_j \phi(e_i, e_j) = \\
@@ -69,13 +81,14 @@ MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
       \vdots \\
       y_n
     \end{array} \right)
-\end{aligned} %]]></script>
+\end{aligned}
+$$</div>
 
 <p>The excerpt ends here. Some math follows.</p>
 
 <!--more-->
 
-<p>Inline <script type="math/tex">f(x)=4</script></p>
+<p>Inline \(f(x)=4\)</p>
 
   </div><a class="u-url" href="/2000/01/01/test.html" hidden></a>
 </article>
