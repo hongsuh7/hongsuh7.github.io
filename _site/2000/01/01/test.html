@@ -7,19 +7,26 @@
 <meta name="generator" content="Jekyll v3.8.7" />
 <meta property="og:title" content="Welcome to Jekyll!" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Post title" />
-<meta property="og:description" content="Post title" />
+<meta name="description" content="Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows." />
+<meta property="og:description" content="Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows." />
 <link rel="canonical" href="http://localhost:4000/2000/01/01/test.html" />
 <meta property="og:url" content="http://localhost:4000/2000/01/01/test.html" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2000-01-01T00:00:00-08:00" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/2000/01/01/test.html","headline":"Welcome to Jekyll!","dateModified":"2000-01-01T00:00:00-08:00","datePublished":"2000-01-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2000/01/01/test.html"},"description":"Post title","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"url":"http://localhost:4000/2000/01/01/test.html","headline":"Welcome to Jekyll!","dateModified":"2000-01-01T00:00:00-08:00","datePublished":"2000-01-01T00:00:00-08:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2000/01/01/test.html"},"description":"Hello world, this is my first Jekyll blog post. Testing some math: The excerpt ends here. Some math follows.","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-$$h(x) = \frac{x}{4}$$</head>
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" /><!-- Enables MathJax -->
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+   tex2jax: {
+     inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+     processEscapes: true
+   }
+ });
+</script>
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script></head>
 <body><header class="site-header">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/"></a><nav class="site-nav">
@@ -32,7 +39,7 @@ $$h(x) = \frac{x}{4}$$</head>
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/blog.html">Blog</a><a class="page-link" href="/">Home</a></div>
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -47,9 +54,7 @@ $$h(x) = \frac{x}{4}$$</head>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h1 id="post-title">Post title</h1>
-
-<p><strong>Hello world</strong>, this is my first Jekyll blog post. Testing some math:</p>
+    <p><strong>Hello world</strong>, this is my first Jekyll blog post. Testing some math:</p>
 
 <script type="math/tex; mode=display">% <![CDATA[
 \begin{aligned}
@@ -67,7 +72,11 @@ $$h(x) = \frac{x}{4}$$</head>
     \end{array} \right)
 \end{aligned} %]]></script>
 
-<p>Inline <script type="math/tex">f(x)=5</script></p>
+<p>The excerpt ends here. Some math follows.</p>
+
+<!--more-->
+
+<p>Inline $f(x)=5$</p>
 
   </div><a class="u-url" href="/2000/01/01/test.html" hidden></a>
 </article>
