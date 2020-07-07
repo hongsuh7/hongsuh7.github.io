@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Simulated Annealing and Smitten Ice Cream | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Simulated Annealing and Smitten Ice Cream" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Introduction I live in Oakland, about a mile away from a Smitten Ice Cream store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream." />
+<meta property="og:description" content="Introduction I live in Oakland, about a mile away from a Smitten Ice Cream store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream." />
+<link rel="canonical" href="http://localhost:4000/2020/06/29/smitten-1.html" />
+<meta property="og:url" content="http://localhost:4000/2020/06/29/smitten-1.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-06-29T15:39:52-07:00" />
+<script type="application/ld+json">
+{"headline":"Simulated Annealing and Smitten Ice Cream","dateModified":"2020-06-29T15:39:52-07:00","datePublished":"2020-06-29T15:39:52-07:00","url":"http://localhost:4000/2020/06/29/smitten-1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/06/29/smitten-1.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"Introduction I live in Oakland, about a mile away from a Smitten Ice Cream store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Simulated Annealing and Smitten Ice Cream</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-06-29T15:39:52-07:00" itemprop="datePublished">
+        Jun 29, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="introduction">Introduction</h2>
+
+<p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
+
+<!--more-->
+
+<p>Of course, I wasn’t really thinking about Smitten when I was learning this stuff (I prefer <a href="https://www.curbsideoakland.com">Curbside</a>). I was looking for ways to optimize a pretty rough function that was not really suitable for any gradient techniques, and I wanted to do something a little more sophisticated than literally a random search over some portion of the parameter space (which ended up being the best option, I’ll post about this later). A friend told me about <a href="https://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a>, which seemed right up my alley because I did a little statistical mechanics in grad school. It ended up not working really well for my problem, but I did find this topic interesting so I thought I’d write about it. <strong>My goal in this post is to explain a simple model for flash freezing using simulated annealing.</strong> I was inspired by the image on the Wikipedia page, which you should compare to the images in this post.</p>
+
+<h2 id="particle-configurations">Particle Configurations</h2>
+
+<p>Let’s consider an arrangement of two types of particles in a box in a $n\times n$ two-dimensional lattice, like this:</p>
+
+<p><img src="/assets/smitten-1/1.png" alt="1" /></p>
+
+<p>Imagine that these particles form the liquid that Smitten ice cream is made from. Of course, the actual Smitten Goo in all probably has millions of different kinds of particles, not arranged in a grid, in three-dimensional space, whatever. Our purpose here is to simplify the very complicated reality of ice cream as much as we can until we arrive at the simplest model which demonstrates the essence of our question: <em>creaminess</em>.</p>
+
+<p>To do this, we only need two types of particles. We’ll assign red particles to the value $+1$ and blue particles to the value $-1$. We will often say that red particles have <em>positive spin</em> and blue particles have <em>negative spin</em>.</p>
+
+<p>The entire arrangement of particles is called a <em>particle configuration</em>. To reiterate and simplify, a particle configuration consists of an assignment of $+1$ or $-1$ to each site in the $n\times n$ box. We will denote the collection of all particles configurations by $B_n$. So each element in $B_n$ is a different particle configuration.</p>
+
+<p><img src="/assets/smitten-1/2.png" alt="2" /></p>
+
+<h2 id="energy-and-temperature">Energy and temperature</h2>
+
+<p>Energy and temperature are two different quantities which work against, and for, one another to accomplish the task of freezing, whcih we are interested in because, remember, we love ice cream.</p>
+
+<h3 id="energy">Energy</h3>
+
+<p>Here is the part where we invoke some physical principles. Each particle configuration has an energy associated to it. The details of energy are not pressing right now, so we will defer this discussion to the appendix. You can invent any notion of energy you’d like. We describe one type of energy, <em>attractive energy</em>, below.</p>
+
+<p><img src="/assets/smitten-1/3.png" alt="3" /></p>
+
+<p>Particles want to position themselves in a low-energy configuration. This is a general physical principle, the Second Law of Thermodynamics. In our model, their ability to do so depends on one parameter, <em>temperature</em>.</p>
+
+<h3 id="temperature">Temperature</h3>
+
+<p>Here is another physically guided principle, though I’m not sure what the following tendency is called. At high temperatures, particles are more tolerant of high-energy configurations. As the temperature decreases, particles develop a more urgent need to have low energy.</p>
+
+<p><img src="/assets/smitten-1/4.png" alt="4" /></p>
+
+<h3 id="the-simulated-annealing-algorithm">The simulated annealing algorithm</h3>
+
+<p>So far, we have described what particles would like to do, but we haven’t specified a process with which they can accomplish their desires. We will begin to describe the simulated annealing algorithm, which does exactly this. Essentially, <strong>simulated annealing simulates the movement of particles in the process of freezing.</strong></p>
+
+<p>To simulate the process of freezing, we let a particle configuration evolve over time in the following way. At each time interval, one particle is randomly chosen. Then it either switches its spin or keeps its spin, depending on the <strong>energy</strong> of the configuration and the <strong>temperature</strong> of the environment.</p>
+
+<p>Here is the qualitative evolution rule:</p>
+<ol>
+  <li>Begin with a random initial configuration.</li>
+  <li>Record the energy $E$.</li>
+  <li>At each time interval, choose a random particle, switch its spin, and recompute the energy $E’$.</li>
+  <li>
+    <p>The particle configuration either accepts or declines the change. The choice is random, with tendencies listed below.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th> </th>
+          <th>high temperature</th>
+          <th>low temperature</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$E&gt;E’$</td>
+          <td>slight inclination to accept</td>
+          <td>strong inclination to accept</td>
+        </tr>
+        <tr>
+          <td>$E&lt;E’$</td>
+          <td>slight inclination to decline</td>
+          <td>strong inclination to decline</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>Once the change is either accepted or declined, the temperature decreases by some amount.</li>
+  <li>Repeat steps 2 through 5 for a fixed number of iterations.</li>
+</ol>
+
+<p><img src="/assets/smitten-1/5.png" alt="5" /></p>
+
+<p>This is not the exact physical process by which freezing of liquids happens. This is just a simple mathematical model which captures the creaminess property that we wish to investigate. This is the simulated annealing algorithm. It was invented for the sake of finding global extrema of a general class of functions. But that’s not what we’re using it for today.</p>
+
+<h2 id="flash-freezing">Flash Freezing</h2>
+
+<p>Here’s the interesting part. <strong>The speed of temperature decrease affects the microscopic structure of the particle configuration</strong>. If we compare two simulated annealing processes with different temperature decrease speeds and identical initial configurations, initial temperatures, final temperatures, and number of iterations, then the slow-cooled configuration will have more ‘‘order’’ than the fast-cooled configuration. We will see different examples of this phenomenon below. Below, we see slow-cooled configurations and fast-cooled configurations with identical parameters otherwise, for two different notions of energy.</p>
+
+<p><img src="/assets/smitten-1/6_3.png" alt="6" />
+<img src="/assets/smitten-1/7_2.png" alt="7" /></p>
+
+<p>In the first example, slow cooling results in larger groups of same-spin particles than fast cooling does. In the second example, slow cooling results in a more crystalline arrangement of particles than fast cooling does. This is what I mean when I say that slow cooling produces more order than fast cooling. The reason is that generally, more order means less energy, and slow cooling results in a lower final energy than fast cooling does. (When using simulated annealing for an optimization problem, fast cooling will find a local minimum close to the starting point, and slow cooling will get you closer to the global minimum.)</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The freezing of ice cream is a much more complicated physical process than the simple model described above. However, this simple model captures many aspects of the ice cream freezing process. In particular, we see that a slow freezing process results in a crystalline structure while a fast freezing process results in a disordered liquidlike structure. Ice crystal formation follows a similar energy principle to the one described above, and fast freezing an ice cream goo is sure to generate smaller crystals, which are more disorderly, than slow freezing. See the image below to see what flash freezing does to food (?) cells (obtained from flash-freeze.net):</p>
+
+<p><img src="/assets/smitten-1/cells.png" alt="8" /></p>
+
+<p>The flash-frozen cells retain cell structure because the ice crystals are smaller and less crystalline, which results in a smaller volume expansion (remember that ice is less dense than water), which prevents cells from exploding. Overall, flash-freezing a liquid keeps it more similar to the original liquid than slow-freezing it does. So there is a mathematical basis to Smitten’s claim that their 90-second liquid-nitrogen-induced ice cream making process produces smaller ice crystals and therefore a creamier texture than other ice creams.</p>
+
+<p>To be clear, though, I don’t really detect any creaminess difference between Smitten and other ice creams. Especially when a Smitten pint is eleven dollars…</p>
+
+<h2 id="appendix">Appendix</h2>
+
+<p>I considered periodic grids, so that neighbors are easy to calculate. The energy I used for the first simulation above is a standard Ising model energy
+++ E(x) = -\sum_{\|i-j\|_{\infty} = 1} x_i x_j ++ where</p>
+<ul>
+  <li>$i,j \in \mathbb{Z}^2$;</li>
+  <li>$x_i \in \{+1,-1\}$ is the spin at site $i$; and</li>
+  <li>$\|i-j\|_{\infty}$ is the larger of the vertical and horizontal distances between $i$ and $j$.</li>
+</ul>
+
+<p>The energy I used for the second simulation includes a repulsive energy at larger distances</p>
+
+<p>++ E(x) = -\sum_{\|i-j\|_{\infty} = 1} x_i x_j + \frac{1}{2} \sum_{\|i-j\|_\infty=3} x_i x_j. ++</p>
+
+<p>The temperature decrease speed I used was of the following shape, with speed parameter $\alpha$
+++ T(\alpha, t) = 4(1-t)^\alpha + 1, ++ where $t$ goes from zero to one. The slow cooling implemented a linear decrease with $\alpha=1$ and the parameter for fast cooling was $\alpha = 10$.</p>
+
+<p>A few more details:</p>
+<ul>
+  <li>the energies you should normalize by dividing by the size of the grid;</li>
+  <li>the images are 100 by 100;</li>
+  <li>the first pair of images went through 300000 time steps and the second pair through 100000 time steps;</li>
+  <li>this takes impossibly long if you recalculate the entire energy after a sign flip, so you have to calculate the local change to update the energy;</li>
+  <li>the switch-acceptance probability was ++ P(E, E’, T) = \frac{1}{Z}\exp((E - E’)/ T), ++ where $E$ is old energy, $E’$ is new energy, $T\in [0,1]$ is temperature, and $Z$ is a normalizing constant which I set to be one. Note that this quantity, though it is called a probability, is not exactly a probability because it may be larger than one. Just cut it off at one.</li>
+</ul>
+
+<!--
+
+Since this is the first post, suffice it to say this: we will pick a particular probability distribution on $B_n$ such that *lower-energy particle configurations have higher probability of occurring*. 
+
+Furthermore, the probability distribution has a parameter $\beta$ between 0 and infinity. Increasing $\beta$ makes lower-energy particle configurations **even more likely**. Decreasing $\beta$ makes lower-energy particle configurations **a little less likely than they were with a higher $\beta$**.
+-->
+
+<!-- next up let's apply simulated annealing to find least-cost path across potentials
+http://eprints.qut.edu.au/62208/1/MiaoTianV11withPubInfo.pdf -->
+
+
+  </div><a class="u-url" href="/2020/06/29/smitten-1.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

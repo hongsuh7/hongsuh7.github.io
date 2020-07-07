@@ -1,8 +1,12 @@
 ---
 layout: post
-title:  "Is Smitten Ice Cream Really That Creamy?: A Mathematical Perspective, part 2"
+title:  "Is Smitten Ice Cream Really That Creamy?: Ising Model"
 excerpt_separator: <!--more-->
 ---
+
+## Ising Model
+
+We'd be doing the simulated annealing algorithm a disservice if we failed to give any mention to the Ising model. 
 
 ## Probability Distributions
 
