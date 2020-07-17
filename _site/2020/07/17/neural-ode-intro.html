@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>A Simple Introduction to Neural ODEs | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="A Simple Introduction to Neural ODEs" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="You might have heard some hype around neural ordinary differential equations (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE." />
+<meta property="og:description" content="You might have heard some hype around neural ordinary differential equations (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE." />
+<link rel="canonical" href="http://localhost:4000/2020/07/17/neural-ode-intro.html" />
+<meta property="og:url" content="http://localhost:4000/2020/07/17/neural-ode-intro.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-17T15:20:38-07:00" />
+<script type="application/ld+json">
+{"headline":"A Simple Introduction to Neural ODEs","dateModified":"2020-07-17T15:20:38-07:00","datePublished":"2020-07-17T15:20:38-07:00","url":"http://localhost:4000/2020/07/17/neural-ode-intro.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/07/17/neural-ode-intro.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"You might have heard some hype around neural ordinary differential equations (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">A Simple Introduction to Neural ODEs</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-07-17T15:20:38-07:00" itemprop="datePublished">
+        Jul 17, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
+
+<!--more-->
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Recall that a resnet (residual neural network) is simply a neural network with residual blocks in them. To explain residual blocks, let $x_0\in \mathbb{R}^m$ be the input to the network and $f_0,f_1,\ldots, f_{n-1}: \mathbb{R}^m \to \mathbb{R}^m$ be functions whose second argument takes in some parameters $\alpha_i$. Then a residual block is the map $x_0 \mapsto x_n$ below:
+++ \begin{cases} x_0&amp;\mapsto x_0 + f_0(x_0, \alpha_0) = x_1, \\ x_1 &amp;\mapsto x_1 + f_1(x_1, \alpha_1) = x_2, \\ &amp;\vdots \\ x_{n-1} &amp;\mapsto x_{n-1} + f_{n-1}(x_{n-1}, \alpha_{n-1}) = x_n. \end{cases}++
+Note that a particularity of this structure is that the dimension must remain the same at each step, which is why all the functions $f_i$ must map $\mathbb{R}^m \to \mathbb{R}^m$.</p>
+
+<p>Rewriting the residual block, we see that it is a discrete difference equation with control $\alpha$:
+++ \begin{cases} x_1 - x_0 &amp;= f_0(x_0,\alpha_0), \\ x_2 - x_1 &amp;= f_1(x_1,\alpha_1), \\ &amp;\vdots \\ x_n - x_{n-1} &amp;= f_{n-1}(x_{n-1}, \alpha_{n-1}). \end{cases} ++
+When I say that $\alpha$ is the control, I mean that it is a sort of external value you can manipulate to change the behavior of the difference equation.</p>
+
+<p>If we move the subscripts of $f$ into the third argument of $f$, then we can write the residual block as the map
+++ x_0 \mapsto x_n, \text{ where }\quad x_{k+1} - x_k = f(x_k, \alpha_k, k). ++</p>
+
+<p>Writing it this way, we see that a residual block has a natural continuous analogue. Consider $x_0,x_1,\ldots,x_n$ as the evolution of a state through time, where $0,1,\ldots,n$ is considered the passing of time. Then the map from $x_0$ to $x_1$ is simply the evolution of the state $x_0$ for 1 unit of time. Similarly, the map from $x_0$ to $x_n$ is the evolution of the initial state $x_0$ for $n$ units of time. Each line in the residual block can be seen as an approximation of a time-one differential equation map (which is the map taking $x(0)$ to $x(1)$ if $x$ is the solution of an ODE), and we can string them all together into a time-$n$ differential equation map
+++ x_0 \mapsto x(n), \text{ where }\quad \begin{cases} \dot{x}(t) &amp;= f(x(t), \alpha(t), t), \\ x(0) &amp;= x_0. \end{cases} ++</p>
+
+<p>This is the idea of Neural ODEs: replace residual blocks with their continuous analogue. The claim is that there are two advantages.</p>
+<ol>
+  <li>The continuous process might be better at modeling the truth than the discrete process.</li>
+  <li>Increasing the number of layers increases the memory usage of backprop. There is a natural way to obtain the gradient of the loss function with respect to the parameters with ODEs called the <em>adjoint method</em> which uses less memory.</li>
+</ol>
+
+<h3 id="a-note-on-the-adjoint-method">A note on the adjoint method</h3>
+<p>The idea of the adjoint method is the following. Suppose initial time is zero and final time is $T$. Suppose the state space is $\mathbb{R}^m$.</p>
+<ol>
+  <li>Solve the ODE forward in time to get the solution $x(T)$ at final time. No need to store any information in this forward pass.</li>
+  <li>Compute the backwards adjoint ODE with the terminal state $x(T)$ going back to the initial time $t=0$. The solution is labeled $a(t) \in \mathbb{R}^m, t \in [0,T]$, and we do not need to store this data. To compute $a(t)$ backwards, we simultaneously recompute $x(t)$ backwards.</li>
+  <li>Recall from step 2 that we are not storing the $a(t)$ information. Instead, we can compute the gradient of the loss function with respect to the parameters by adding up some function of $a(t)$ backwards in time, without any need to store all of $a(t), t\in[0,T]$ at the same time.</li>
+</ol>
+
+<p>The difference between the adjoint method and backprop is that backprop stores the results of the intermediate steps $x_0,x_1,\ldots, x_{n-1}$, whereas the adjoint method recomputes them backwards. So the adjoint method consumes less memory (though I don’t know enough to say whether this is actually a problem that needs a solution).</p>
+
+<h2 id="implementation-on-mnist-dataset">Implementation on MNIST dataset</h2>
+
+<p>We will write a simple PyTorch implementation of an ODENet on the MNIST dataset using Ricky Chen’s <a href="https://github.com/rtqichen/torchdiffeq"><code class="highlighter-rouge">torchdiffeq</code></a> package.</p>
+
+<p>First install <code class="highlighter-rouge">torchdiffeq</code> using pip with the command</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip install torchdiffeq
+</code></pre></div></div>
+
+<p>Now let’s begin the script. Import all the relevant packages and prepare the MNIST dataset.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import torch
+import torchvision
+import torchvision.transforms as transforms
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# enables the adjoint method for training,
+# probably doesn't help in this setting
+from torchdiffeq import odeint_adjoint as odeint
+
+import matplotlib.pyplot as plt 
+import numpy as np
+import time
+
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize(0.5, 0.5)]) # normalize to [-1,1]
+
+trainset = torchvision.datasets.MNIST(root='./data', train=True,
+                                        download=True, transform=transform)
+
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=16,
+                                          shuffle=True, num_workers=4)
+
+testset = torchvision.datasets.MNIST(root='./data', train=False,
+                                       download=True, transform=transform)
+
+testloader = torch.utils.data.DataLoader(testset, batch_size=16,
+                                         shuffle=True, num_workers=4)
+</code></pre></div></div>
+
+<p>Then we define a class <code class="highlighter-rouge">MyNet</code> under which we will write our two models.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class MyNet(nn.Module):
+	def __init__(self, path):
+		super(MyNet, self).__init__()
+		self.path = path
+
+	def num_params(self):
+		return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+	def load(self):
+		self.load_state_dict(torch.load('./' + self.path + '.pth'))
+</code></pre></div></div>
+
+<p>Next we define the function $f(x,a,t)$ in the ODE $\dot{x} = f(x,a,t)$. For simplicity, we get rid of the $t$ dependence and make the control also time-independent. Below is the function ++f = \text{gn} \circ \text{conv}(a) \circ \text{relu} \circ \text{gn},++ where $\text{gn}$ is the GroupNorm function, $\text{relu}$ is the ReLU function, $\text{conv}$ is a convolution, and $a$ is the set of parameters of the $\text{conv}$ function. (In order to run this on a personal computer, we need a pretty small dimension so the GroupNorm will just become an InstanceNorm for us.) Notice that every function preserves dimension, which is necessary for the ODE to be defined.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ODEFunc(nn.Module):
+	def __init__(self, dim):
+		super(ODEFunc, self).__init__()
+		self.gn = nn.GroupNorm(min(32, dim), dim)
+		self.conv = nn.Conv2d(dim, dim, 3, padding = 1)
+		self.nfe = 0 # time counter
+
+	def forward(self, t, x):
+		self.nfe += 1
+		x = self.gn(x)
+		x = F.relu(x)
+		x = self.conv(x)
+		x = self.gn(x)
+		return x
+</code></pre></div></div>
+<p>Now we must define the ODEBlock which will replace the residual block. What you see below is the map $x_0 \to x(1)$ where $x$ is the solution of the differential equation
+++ \dot{x}(t) = f(x(t), a), \quad t\in[0,1], \quad x(0) = x_0 ++ where $a$ is the set of parameters for <code class="highlighter-rouge">conv</code>. More precisely, 
+++ \dot{x}(t) = \text{gn} \circ \text{conv}(a) \circ \text{relu} \circ \text{gn}(x(t)), \quad t\in[0,1], \quad x(0)=x_0 ++ where all the parameters $a$ are coming from the convolution.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ODEBlock(nn.Module):
+	def __init__(self, odefunc):
+		super(ODEBlock, self).__init__()
+		self.odefunc = odefunc
+		self.integration_time = torch.tensor([0, 1]).float()
+
+	def forward(self, x):
+		out = odeint(self.odefunc, x, self.integration_time, rtol=1e-1, atol=1e-1) # high tolerances for speed
+
+		# first dimension is x(0) and second is x(1),
+		# so we just want the second
+		return out[1]
+</code></pre></div></div>
+
+<p>Now we create a ODENet with this block. There are three parts to this ODENet.</p>
+<ol>
+  <li>We take our 28-by-28 image and apply a 3-by-3 convolution without padding to it with 6 output channels. Then we apply GroupNorm and ReLU.</li>
+  <li>We apply the ODEBlock.</li>
+  <li>We apply a 2-by-2 average pool and one fully connected linear layer.
+I keep track of the image dimensions below.</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class ODENet(MyNet):
+	def __init__(self):
+		super(ODENet, self).__init__('mnist_odenet')
+		self.conv1 = nn.Conv2d(1, 6, 3)
+		self.gn = nn.GroupNorm(6, 6)
+		self.odefunc = ODEFunc(6)
+		self.odeblock = ODEBlock(self.odefunc)
+		self.pool = nn.AvgPool2d(2)
+		self.fc = nn.Linear(6 * 13 * 13, 10)
+
+	def forward(self, x):
+		# 26 x 26
+		x = self.conv1(x)
+		x = F.relu(self.gn(x))
+
+		# stays 26 x 26
+		x = self.odeblock(x)
+
+		# 13 x 13
+		x = self.pool(x)
+
+		# fully connected layer
+		x = x.view(-1, 6*13*13)
+		x = self.fc(x)
+
+		return x
+</code></pre></div></div>
+
+<p>That’s all! Now we just define the training and testing methods.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def train(net):
+	n = 60000 / (5*16) # batch size 16
+	criterion = nn.CrossEntropyLoss()
+	optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+	for epoch in range(10):  
+		running_loss = 0.0
+		for i, data in enumerate(trainloader, 0):
+			# get the inputs; data is a list of [inputs, labels]
+			inputs, labels = data
+
+			# zero the parameter gradients
+			optimizer.zero_grad()
+
+			# forward + backward + optimize
+			outputs = net(inputs)
+			loss = criterion(outputs, labels)
+			loss.backward()
+			optimizer.step()
+
+			# print statistics
+			running_loss += loss.item()
+			if i % n == n-1:    
+				print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / n))
+				running_loss = 0.0
+
+	print('Finished Training')
+	torch.save(net.state_dict(), './' + net.path + '.pth')
+
+def test(net):
+	initial_time = time.time()
+	correct = 0
+	total = 0
+	with torch.no_grad():
+		for data in testloader:
+			images, labels = data
+			batch_size = images.shape[0]
+			outputs = net(images)
+			_, predicted = torch.max(outputs.data, 1)
+			total += labels.size(0)
+			correct += (predicted == labels).sum().item()
+	final_time = time.time()
+	print('Accuracy of the ' + net.path + ' network on the test set: %.2f %%' % (100 * correct / total))
+	print('Time: %.2f seconds' % (final_time - initial_time))
+	return(100 * correct / total)
+</code></pre></div></div>
+
+<p>Let’s train our model. <strong>Note: this is pretty expensive to run on a personal computer. It took me half a day to train. If you’re doing this on a personal computer without a GPU, then consider making the ODENet even simpler, say with 2 channels instead of 6.</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>odenet = ODENet()
+train(odenet)
+</code></pre></div></div>
+<p>At this point, we have saved our parameters so we can load them back up for the test.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>odenet.load()
+test(odenet)
+
+# Output:
+# Accuracy of the mnist_odenet network on the test set: 98.62 %
+# Time: 44.61 seconds
+</code></pre></div></div>
+<p>As you can see, this is very expensive just to test on a regular computer.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>A Neural ODE is the continuous analogue of a resnet. The main advantage is that in this setting, there is an alternative way to compute the parameter gradients using less memory.</p>
+
+<p>Some thoughts: during my short time reading up on this subject, I am not yet convinced that Neural ODEs provide enough of a performance boost to justify the additional computation required for it. First, I’m sure that there is a discrete analogue of the adjoint method which is almost surely simpler to implement than its continuous version, for applications in which memory usage is critical. Second, I’m not sure that there is a reason why the continuous model is a more accurate reflection of the true classifier than the discrete model. Usually in math, when there is a discrete model and an analogous continuous model, the continuous one is derived from a microscopic model, and the discrete model is a crude approximation of the continuous one. In such a setting, it’s clear that the continuous model is closer to the truth than the discrete model. In the Neural ODE setting, it’s not so clear.</p>
+
+<p>Below is the full code in one chunk.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import torch
+import torchvision
+import torchvision.transforms as transforms
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+
+# enables the adjoint method for training
+from torchdiffeq import odeint_adjoint as odeint
+
+import matplotlib.pyplot as plt 
+import numpy as np
+import time
+
+transform = transforms.Compose(
+    [transforms.ToTensor(),
+     transforms.Normalize(0.5, 0.5)]) # normalize to [-1,1]
+
+trainset = torchvision.datasets.MNIST(root='./data', train=True,
+                                        download=True, transform=transform)
+
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=16,
+                                          shuffle=True, num_workers=4)
+
+testset = torchvision.datasets.MNIST(root='./data', train=False,
+                                       download=True, transform=transform)
+
+testloader = torch.utils.data.DataLoader(testset, batch_size=16,
+                                         shuffle=True, num_workers=4)
+
+############################################################################
+
+class ODEFunc(nn.Module):
+	def __init__(self, dim):
+		super(ODEFunc, self).__init__()
+		self.gn = nn.GroupNorm(min(32, dim), dim)
+		self.conv = nn.Conv2d(dim, dim, 3, padding = 1)
+		self.nfe = 0 # time counter
+
+	def forward(self, t, x):
+		self.nfe += 1
+		x = self.gn(x)
+		x = F.relu(x)
+		x = self.conv(x)
+		x = self.gn(x)
+		return x
+
+############################################################################
+
+class ODEBlock(nn.Module):
+	def __init__(self, odefunc):
+		super(ODEBlock, self).__init__()
+		self.odefunc = odefunc
+		self.integration_time = torch.tensor([0, 1]).float()
+
+	def forward(self, x):
+		out = odeint(self.odefunc, x, self.integration_time, rtol=1e-1, atol=1e-1) # high tolerances for speed
+
+		# first dimension is x(0) and second is x(1),
+		# so we just want the second
+		return out[1]
+
+############################################################################
+
+class ODENet(MyNet):
+	def __init__(self):
+		super(ODENet, self).__init__('mnist_odenet')
+		self.conv1 = nn.Conv2d(1, 6, 3)
+		self.gn = nn.GroupNorm(6, 6)
+		self.odefunc = ODEFunc(6)
+		self.odeblock = ODEBlock(self.odefunc)
+		self.pool = nn.AvgPool2d(2)
+		self.fc = nn.Linear(6 * 13 * 13, 10)
+
+	def forward(self, x):
+		# 26 x 26
+		x = self.conv1(x)
+		x = F.relu(self.gn(x))
+
+		# stays 26 x 26
+		x = self.odeblock(x)
+
+		# 13 x 13
+		x = self.pool(x)
+
+		# fully connected layer
+		x = x.view(-1, 6*13*13)
+		x = self.fc(x)
+
+		return x
+
+############################################################################
+
+def train(net):
+	n = 60000 / (5*16) # batch size 16
+	criterion = nn.CrossEntropyLoss()
+	optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+	for epoch in range(10):  
+		running_loss = 0.0
+		for i, data in enumerate(trainloader, 0):
+			# get the inputs; data is a list of [inputs, labels]
+			inputs, labels = data
+
+			# zero the parameter gradients
+			optimizer.zero_grad()
+
+			# forward + backward + optimize
+			outputs = net(inputs)
+			loss = criterion(outputs, labels)
+			loss.backward()
+			optimizer.step()
+
+			# print statistics
+			running_loss += loss.item()
+			if i % n == n-1:    
+				print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / n))
+				running_loss = 0.0
+
+	print('Finished Training')
+	torch.save(net.state_dict(), './' + net.path + '.pth')
+
+def test(net):
+	initial_time = time.time()
+	correct = 0
+	total = 0
+	with torch.no_grad():
+		for data in testloader:
+			images, labels = data
+			batch_size = images.shape[0]
+			outputs = net(images)
+			_, predicted = torch.max(outputs.data, 1)
+			total += labels.size(0)
+			correct += (predicted == labels).sum().item()
+	final_time = time.time()
+	print('Accuracy of the ' + net.path + ' network on the test set: %.2f %%' % (100 * correct / total))
+	print('Time: %.2f seconds' % (final_time - initial_time))
+	return(100 * correct / total)
+
+
+## Main ##
+odenet = ODENet()
+train(odenet)
+
+## Test ##
+odenet.load()
+test(odenet)
+
+# Output:
+# Accuracy of the mnist_odenet network on the test set: 98.62 %
+# Time: 44.61 seconds
+
+</code></pre></div></div>
+
+
+  </div><a class="u-url" href="/2020/07/17/neural-ode-intro.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

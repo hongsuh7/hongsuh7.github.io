@@ -59,10 +59,76 @@ window.MathJax = {
         <ul>
   
     <li>
+      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 30px">A Simple Introduction to Neural ODEs</a>
+      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
+
+
+    </li>
+  
+    <li>
+      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 30px">A Simple Introduction to Neural ODEs</a>
+      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
+
+
+    </li>
+  
+    <li>
+      <a href="/2020/07/10/tennis-2.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 2</a>
+      <p>In this post, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+
+
+    </li>
+  
+    <li>
+      <a href="/2020/07/10/tennis-1.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 1</a>
+      <h2 id="introduction">Introduction</h2>
+
+<p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
+
+
+    </li>
+  
+    <li>
       <a href="/2020/07/07/tennis-1.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 1</a>
       <h2 id="introduction">Introduction</h2>
 
 <p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
+
+
+    </li>
+  
+    <li>
+      <a href="/2020/06/29/smitten-2.html" style="font-size: 30px">Is Smitten Ice Cream Really That Creamy?: Ising Model</a>
+      <h2 id="ising-model">Ising Model</h2>
+
+<p>We’d be doing the simulated annealing algorithm a disservice if we failed to give any mention to the Ising model.</p>
+
+<h2 id="probability-distributions">Probability Distributions</h2>
+
+<p>The phrase <code class="highlighter-rouge">a probability distribution on the set of particle configurations</code> is a mouthful, but the idea is simple: assign a probability to each particle configuration. For example,</p>
+
+<!-- insert here -->
+
+<p>There are many different probability distributions we can put on any $B_n$. Most are not physically meaningful. For example, I could define a probability distribution on $B_2$ as follows.</p>
+
+<!-- insert here -->
+
+<p>Sure, this is a probability distribution. But it is not very useful because it has no connection to physical reality. This is where <em>energy</em> comes in.</p>
+
+<!-- insert here -->
+
+<p>It is useful to think about the extremes of $\beta$. If $\beta=0$, then every particle configuration is equally likely, no matter their energies. If $\beta=\infty$, then the lowest-energy particle configuration has probability one while the others have probability zero. (If there are many lowest-energy configurations, they all have the same probability.) The parameter $\beta$ has an important physical meaning which we will describe now.</p>
+
+<h2 id="inverse-temperature">Inverse Temperature</h2>
+<p>The parameter $\beta$ is often called <em>inverse temperature</em>.</p>
+
+    </li>
+  
+    <li>
+      <a href="/2020/06/29/smitten-1.html" style="font-size: 30px">Simulated Annealing and Smitten Ice Cream</a>
+      <h2 id="introduction">Introduction</h2>
+
+<p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
 
 
     </li>
