@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Testing Robustness of Neural ODEs against Adversarial Attacks | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Testing Robustness of Neural ODEs against Adversarial Attacks" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In my last post, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper On Robustness of Neural Ordinary Differential Equations (Yan et al)." />
+<meta property="og:description" content="In my last post, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper On Robustness of Neural Ordinary Differential Equations (Yan et al)." />
+<link rel="canonical" href="http://localhost:4000/2020/07/22/neural-ode-robustness.html" />
+<meta property="og:url" content="http://localhost:4000/2020/07/22/neural-ode-robustness.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-22T14:57:22-07:00" />
+<script type="application/ld+json">
+{"headline":"Testing Robustness of Neural ODEs against Adversarial Attacks","dateModified":"2020-07-22T14:57:22-07:00","datePublished":"2020-07-22T14:57:22-07:00","url":"http://localhost:4000/2020/07/22/neural-ode-robustness.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/07/22/neural-ode-robustness.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"In my last post, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper On Robustness of Neural Ordinary Differential Equations (Yan et al).","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Testing Robustness of Neural ODEs against Adversarial Attacks</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-07-22T14:57:22-07:00" itemprop="datePublished">
+        Jul 22, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>In my <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">last post</a>, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper <a href="https://arxiv.org/pdf/1910.05513.pdf">On Robustness of Neural Ordinary Differential Equations</a> (Yan et al).</p>
+
+<!--more-->
+
+<h2 id="code">Code</h2>
+<p>Code for this blog post is on my <a href="https://github.com/hongsuh7">GitHub</a>.</p>
+
+<h2 id="compromises-and-opinions">Compromises and Opinions</h2>
+
+<p>Recall that I said it took six hours for me to train the simple ODENet I described in the previous post. I couldn’t do meaningful analyses if one data point takes me half a day to compute. So I decided to approximate the ODENet.</p>
+
+<p>I approximated it in basically the simplest way possible: the regular ResNet is an explicit Euler method with step size 1; I used the explicit Euler method with step size 1/4. <strong>Philosophical tangent:</strong> I think there is actually little reason for anyone to consider implicit methods, adaptive/small step sizes, or higher-order methods for ODENets. Why?</p>
+
+<ol>
+  <li>
+    <p>Implicit methods are better than explicit ones when it comes to complicated ODEs with “stiff”, or steep, $f$s in $\dot{x} = f(x,t)$. There is no evidence to me that a ResNet block is like this at all. For example, in the original ResNet paper, the blocks basically look like ++ \text{ReLU} \circ \text{conv} \circ \text{ReLU} \circ \text{conv}  ++ and this doesn’t seem sufficiently high-gradient enough to justify using implicit methods. In the paper <a href="https://arxiv.org/abs/1811.00995">Invertible Residual Networks</a>, the authors (many of them also wrote the Neural ODEs paper) constrain these blocks to have Lipschitz constant less than one, and this does not affect performance in a significant manner; this suggests to me that even without constraints, these blocks (by themselves) don’t have huge Lipschitz constants and therefore doesn’t necessitate using implicit methods.</p>
+  </li>
+  <li>
+    <p>As I said, the <a href="https://arxiv.org/abs/1811.00995">Invertible Residual Networks</a> paper suggests to me that the residual blocks have fairly small Lipschitz constants. So large step sizes with explicit methods should approximate the ODE solution fairly well.</p>
+  </li>
+  <li>
+    <p>And after all, there is no “true” solution we are trying to approximate with discrete steps in the first place. So there is no reason to think that (prior to the experiments) larger error of the numerical method will lead to poorer performance of the classifier.</p>
+  </li>
+</ol>
+
+<p>I do think that the injectivity of the ODE map helps with something. Yan et al. think that this property of the ODE map is responsible for its adversarial robustness. But we don’t need tiny step sizes for this to happen, and I don’t think implicit methods really help. For example, if $f$ has Lipschitz constant $L$, then $f/(2L)$ has Lipschitz constant $1/2$, so we need only to do explicit Euler method with step size $1/\lceil 2L \rceil$ in order to get injectivity. If you have opinions on this, please let me know. I’m curious to see what people think.</p>
+
+<h2 id="results">Results</h2>
+
+<p>I replaced the ODEBlock $\dot{x} = f(x), ~ t\in[0,1]$ in the previous post with the explicit Euler method with step size 1/4. I compared this with the corresponding ResNet, which can be seen as the explicit Euler method with step size 1. I conducted Gaussian noise tests (adding Gaussian noise with the indicated standard deviation to the entire image) and FGSM (fast gradient sign method) tests. I also conducted PGD (projected gradient descent) attacks but they were basically zero all the time for like epsilon = 0.15 so I didn’t include them. The summary statistics are below. The following is R code.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; nrow(euler1)
+[1] 15
+
+&gt; nrow(euler4)
+[1] 11
+
+&gt; sapply(X = euler1, FUN = mean)
+    plain   gaus0.5   gaus1.0   gaus1.5  fgsm0.15   fgsm0.3   fgsm0.5 
+98.146667 93.480667 67.374000 41.986667 57.528000 16.608000  1.681333 
+
+&gt; sapply(X = euler1, FUN = sd)
+     plain    gaus0.5    gaus1.0    gaus1.5   fgsm0.15    fgsm0.3    fgsm0.5 
+ 0.1836404  2.1582515  5.5016579  4.4575805 27.3154483 13.2658871  2.8893545 
+
+&gt; sapply(X = euler4, FUN = mean)
+    plain   gaus0.5   gaus1.0   gaus1.5  fgsm0.15   fgsm0.3   fgsm0.5 
+98.331818 93.660000 65.752727 40.272727 63.420000 18.394545  1.952727
+
+&gt; sapply(X = euler4, FUN = sd)
+     plain    gaus0.5    gaus1.0    gaus1.5   fgsm0.15    fgsm0.3    fgsm0.5 
+ 0.1373913  2.3716281  5.2053032  3.0574568 23.4010983 18.3954023  3.9513772 
+</code></pre></div></div>
+
+<p>Note the standard deviations! What the summary statistics don’t tell you is that the distribution of numbers for the fgsm tests were fairly bimodal; more than half the time, these models do very poorly on the fgsm tests (like &lt;5% on fgsm0.3) and the other times, they did a lot better (like &gt;20% on fgsm0.5). You can take a look at the dataset on my <a href="https://github.com/hongsuh7">GitHub</a>. Carrying out a statistical test is almost meaningless here, because obviously there is no statisically significant difference between the two methods.</p>
+
+<p>I still don’t know why the distribution is bimodal on adversarial tests. I’d love to find out—please let me know if you know why this happens.</p>
+
+<h2 id="adversarial-training-results">Adversarial Training: Results</h2>
+
+<p>To really see the potential for robustness in these models, we should do some adversarial training before testing. To do this, with each mini-batch I made my usual gradient descent step, then I also calculated the corresponding fgsm attacks with epsilon=0.15. I made another gradient descent step with these perturbed images and their corresponding labels, but the loss function I multiplied by 0.5 (to tell the model that the original images are more important than the perturbed ones, but not by much).</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; nrow(euler1_adv)
+[1] 24
+
+&gt; nrow(euler4_adv)
+[1] 14
+
+&gt; sapply(euler1_adv, mean)
+   plain  gaus0.5  gaus1.0  gaus1.5 fgsm0.15  fgsm0.3  fgsm0.5  fgsm0.7 
+98.44625 97.19875 75.43000 44.59667 95.14208 86.97542 60.76250 26.09750 
+
+&gt; sapply(euler1_adv, sd)
+    plain   gaus0.5   gaus1.0   gaus1.5  fgsm0.15   fgsm0.3   fgsm0.5   fgsm0.7 
+0.1407376 0.4559111 4.5464013 4.7227900 0.6125001 1.8283872 6.3299538 8.5499999 
+
+&gt; sapply(euler4_adv, mean)
+   plain  gaus0.5  gaus1.0  gaus1.5 fgsm0.15  fgsm0.3  fgsm0.5  fgsm0.7 
+98.61857 97.49929 74.84214 44.54429 95.72857 88.15000 59.82071 26.48643 
+
+&gt; sapply(euler4_adv, sd)
+    plain   gaus0.5   gaus1.0   gaus1.5  fgsm0.15   fgsm0.3   fgsm0.5   fgsm0.7 
+0.1029456 0.6656687 4.3496387 3.5756306 0.3303811 1.6361399 6.7798326 7.5182287 
+</code></pre></div></div>
+
+<p>Ok, now we’re cooking. The variances are down – in fact they are very small for fgsm0.15 and fgsm0.3. We can do a regular t-test with the fgsm data.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; t.test(euler1_adv$fgsm0.15, euler4_adv$fgsm0.15)
+
+	Welch Two Sample t-test
+
+data:  euler1_adv$fgsm0.15 and euler4_adv$fgsm0.15
+t = -3.8317, df = 35.875, p-value = 0.000493
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.8969503 -0.2760259
+sample estimates:
+mean of x mean of y 
+ 95.14208  95.72857 
+
+&gt; t.test(euler1_adv$fgsm0.3, euler4_adv$fgsm0.3)
+
+	Welch Two Sample t-test
+
+data:  euler1_adv$fgsm0.3 and euler4_adv$fgsm0.3
+t = -2.0431, df = 29.877, p-value = 0.04995
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -2.3488747386 -0.0002919281
+sample estimates:
+mean of x mean of y 
+ 86.97542  88.15000 
+</code></pre></div></div>
+
+<p>The 4-step Euler network is statistically significantly better against adversarial attacks than the 1-step Euler network! But, as you can see, it’s not <em>that</em> much better. The other two attacks, fgsm0.5 and fgsm0.7, have no statistically significant difference.</p>
+
+<p>We can also do t-tests on the other columns. 4-step Euler is definitely better than 1-step Euler for the plain (no perturbation) tests, whether adversarially trained or not.</p>
+
+<p>Note that the adversarially trained networks are better than the regularly trained networks even with no attacks, and with Gaussian noise attacks.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>We see that even with this simple structure, we see a statistically significant improvement in the 4-step Euler network from the 1-step Euler network (regular ResNet). It does take more computational cost to backprop through more functions, though the number of parameters is equal. But yes, we do conclude that ODENets are more robust against adversarial attacks, and a little better in general, than regular ResNets (but not by much).</p>
+
+  </div><a class="u-url" href="/2020/07/22/neural-ode-robustness.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
