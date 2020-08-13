@@ -53,7 +53,7 @@ window.MathJax = {
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/resume.html">Resume</a></div>
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/portfolio.html">Portfolio</a><a class="page-link" href="/resume.html">Resume</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -160,7 +160,9 @@ window.MathJax = {
 (0.612, 0.662, 0.211) # FiveThirtyEight's
 </code></pre></div></div>
 
-<p>Pretty good. We are able to reduce log-loss by 1% or so from FiveThirtyEight’s model.</p>
+<p>Pretty good. We are able to reduce log-loss by 1% or so from FiveThirtyEight’s model. Some sample averaged ratings are below.</p>
+
+<p><img src="/assets/tennis-2/ratings.png" alt="" /></p>
 
 <h2 id="comparison-with-saso-average-a-little-bit-of-a-bummer">Comparison with SA+SO average: a little bit of a bummer</h2>
 <p>Now let’s build a model in which the win probability is averaged between the predictions given by the surface-agnostic rating and the surface-only rating. With our framework, the respective $A$s are ++ \begin{pmatrix} 1&amp;1&amp;1\\1&amp;1&amp;1\\1&amp;1&amp;1\end{pmatrix}, \quad \begin{pmatrix}1&amp;0&amp;0\\0&amp;1&amp;0\\0&amp;0&amp;1\end{pmatrix}.++ The average method fits right into our framework and can be computed with one line of code. On 2015-2019 data, we get the following results.</p>

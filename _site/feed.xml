@@ -1,5 +1,70 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-13T12:52:57-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">In All Probably</title><subtitle>A collection of math topics with lots of pictures and animations!
-</subtitle><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><entry><title type="html">A Generalized Elo System for Tennis Players, part 2</title><link href="http://localhost:4000/2020/08/13/tennis-2.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, part 2" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/tennis-2</id><content type="html" xml:base="http://localhost:4000/2020/08/13/tennis-2.html">&lt;p&gt;In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-13T14:38:52-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">In All Probably</title><subtitle>A collection of math topics with lots of pictures and animations!
+</subtitle><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><entry><title type="html">A Visual Introduction to Interacting Particle Systems</title><link href="http://localhost:4000/2020/08/13/particles-1.html" rel="alternate" type="text/html" title="A Visual Introduction to Interacting Particle Systems" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/particles-1</id><content type="html" xml:base="http://localhost:4000/2020/08/13/particles-1.html">&lt;p&gt;An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;one-particle-system&quot;&gt;One Particle System&lt;/h2&gt;
+
+&lt;p&gt;Suppose you have one particle on the integer number line. You flip a coin, and if it’s heads, the particle jumps left; if it’s tails, the particle stays. Keep flipping coins. This simple one-particle-model looks like this when simulated. The $t$ denotes the $t$th coin flip, and the variable $t$ stands for time.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_onedot.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The main question we ask is: &lt;strong&gt;what is the long-term behavior of the particle?&lt;/strong&gt; By “long-term,” I mean: if a long time passes, what can we say about where the particle is?&lt;/p&gt;
+
+&lt;p&gt;Suppose the starting point of the particle is zero. At time $t$, the position of the particle is ++ p(t) = -(X_1 + X_2  +\cdots + X_t), ++ where ++ X_i =\begin{cases}
+  1 &amp;amp;\quad \text{if heads} \\
+  0 &amp;amp;\quad \text{if tails}
+\end{cases} ++
+represents the result of the $i$th coin flip. This formula gives us all that we can possibly know about the long-term behavior of $p(t)$ because sums of independent coin flips are possibly the most-studied object in probability.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;We know, for example, that ++ \lim_{t\to \infty} \frac{p(t)}{t} = \frac{-1}{2}, ++ where the limit is interpreted in basically any fashion.&lt;/li&gt;
+  &lt;li&gt;We also know that ++ \frac{p(t) + t/2}{\sqrt{t}/2} \text{ is approximately } N(0,1), ++ the standard normal distribution. &lt;!--More precisely, \[ P\left( a &lt; \frac{p(t) + t/2}{\sqrt{t}/2}&lt; b \right) \approx \frac{1}{\sqrt{2\pi}}\int_a^b e^{-x^2/2} \ dx,  \] where $P$ denotes probability. --&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first of these is called the &lt;em&gt;Law of Large Numbers (LLN)&lt;/em&gt;, and the second is called the &lt;em&gt;Central Limit Theorem (CLT)&lt;/em&gt;. They are cornerstones of probability theory.&lt;/p&gt;
+
+&lt;h2 id=&quot;many-particle-system-with-interaction&quot;&gt;Many-particle system with interaction&lt;/h2&gt;
+&lt;p&gt;With one particle on the number line, classical probability theory can easily answer any question about the long-term behavior of the system. What if there are many particles on the number line?&lt;/p&gt;
+
+&lt;p&gt;If there are many particles and the particles can pass through one another without consequence, then each particle behaves independently of the others. We effectively get many copies of the one-particle system explored in the previous section.&lt;/p&gt;
+
+&lt;p&gt;In our physical world, particles interact with one another. They bounce off of each other like billiards balls, or they might attract or repel one another. The simplest model for particle repulsion is to disallow particles occupying the same space.&lt;/p&gt;
+
+&lt;p&gt;Let’s expand our single-particle system to accommodate many particles. Each particle has a coin above it which gets flipped at every time step. All the coins flip simultaneously. If the coin lands heads, the corresponding particle &lt;em&gt;tries&lt;/em&gt; to jump one spot to the left. However, if the left-neighboring spot is occupied, the particle &lt;em&gt;does not jump&lt;/em&gt;. If the coin lands head &lt;strong&gt;and&lt;/strong&gt; the left-neighoring spot is unoccupied, the particles jumps left.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_dots.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This simple particle interaction rule adds a ton of complexity to the model. This model is called the totally asymmetric simple exlusion process (TASEP). “Totally asymmetric” because particles only jump to the left, “exclusion” because we exclude particles occupying the same position, and “simple” because… it’s the simplest of these kind of interacting particle systems?&lt;/p&gt;
+
+&lt;p&gt;The resolution of the analogue of the CLT for particle systems like these is an enormous challenge in probability. LLN is generally easier and verified for larger classes of particle systems, but the CLT is very difficult, and only resolved in specific models like TASEP. And even for TASEP, there is a lot to discover about its fluctuations in the CLT realm.&lt;/p&gt;
+
+&lt;h2 id=&quot;height-function&quot;&gt;Height function&lt;/h2&gt;
+
+&lt;p&gt;One of the simplest initial configurations to start with is the “wedge” initial condition, displayed in the animation above. In the setting where particles are only jumping to the left, this means that every site to the right of and including zero is occupied, while every site to the left of zero is unoccupied. Another simple initial condition is the one in which each site is occupied with probability $p$, and all sites are independent of one another. To obtain a full understanding of TASEP, we need to consider both initial conditions. And in fact, all other possible initial conditions can sort of be boiled down to these I think. For us, we will only look at the wedge initial condition.&lt;/p&gt;
+
+&lt;p&gt;To study the dynamics, we introduce a height function corresponding to the system, which helps us analyze it. We begin with the wedge initial condition. The {\emph height function} $h(x,t)$ associated with the particle system is a function which counts the number of particles strictly to the right of $x$ at time $t$. This means that the height function starts at $h(x,0) = \max(0,x)$, which represents the wedge initial condition, and each time a particle jumps from $x$ to $x-1$, then $h(x,t)$ increments by one. Here is what $h(x,t)$ would look like as time passes.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;360&quot; src=&quot;/assets/particles-1/tasep1.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Remember that we want to study the long-term dynamics of $h(x,t)$. Just as we do for LLN when we study $X_1+X_2+\cdots+X_n$ the sum of $n$ iid random variables, we must scale by an appropriate factor while letting $t\to\infty$. The correct scaling is ++ \lim_{\epsilon \to 0} \epsilon h\left(\frac{x}{\epsilon}, \frac{t}{\epsilon}\right). ++ Essentially, when $\epsilon \to 0$, we are zooming out and speeding up time at such a rate so that we get an interesting function at the end of the limit. Here is what that would look like.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_scale.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You can observe that while the microscopic dynamics are random, the macroscopic dynamics seem to be converging to a deterministic function! This is LLN for this particle system. We see it in this animation, but proving it is another matter.&lt;/p&gt;
+
+&lt;p&gt;You might ask, what is CLT for this particle system? It is very complicated and I myself have only barely touched the tip of the iceberg here. The analogue of the Gaussian distribution is various distributions related to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Kardar–Parisi–Zhang_equation&quot;&gt;KPZ equation&lt;/a&gt;. TASEP is one of the simplest models in the “KPZ universality class,” which is loosely defined as a class of models for which the fluctuations are expected to follow the same distributions that the KPZ equation exhibits.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;We will hopefully get to the kinds of things I investigated in my graduate studies. I looked at a generalization of TASEP whose fluctuations are unknown (but expected to be in the KPZ class) and derived some bounds for the fluctuations. More to come.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</summary></entry><entry><title type="html">A Generalized Elo System for Tennis Players, part 2</title><link href="http://localhost:4000/2020/08/13/tennis-2.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, part 2" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/tennis-2</id><content type="html" xml:base="http://localhost:4000/2020/08/13/tennis-2.html">&lt;p&gt;In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;&lt;em&gt;(Surface-only)&lt;/em&gt; Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.&lt;/li&gt;
@@ -91,7 +156,9 @@
 (0.612, 0.662, 0.211) # FiveThirtyEight's
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Pretty good. We are able to reduce log-loss by 1% or so from FiveThirtyEight’s model.&lt;/p&gt;
+&lt;p&gt;Pretty good. We are able to reduce log-loss by 1% or so from FiveThirtyEight’s model. Some sample averaged ratings are below.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/tennis-2/ratings.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;comparison-with-saso-average-a-little-bit-of-a-bummer&quot;&gt;Comparison with SA+SO average: a little bit of a bummer&lt;/h2&gt;
 &lt;p&gt;Now let’s build a model in which the win probability is averaged between the predictions given by the surface-agnostic rating and the surface-only rating. With our framework, the respective $A$s are ++ \begin{pmatrix} 1&amp;amp;1&amp;amp;1\\1&amp;amp;1&amp;amp;1\\1&amp;amp;1&amp;amp;1\end{pmatrix}, \quad \begin{pmatrix}1&amp;amp;0&amp;amp;0\\0&amp;amp;1&amp;amp;0\\0&amp;amp;0&amp;amp;1\end{pmatrix}.++ The average method fits right into our framework and can be computed with one line of code. On 2015-2019 data, we get the following results.&lt;/p&gt;
