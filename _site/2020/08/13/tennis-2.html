@@ -8,15 +8,15 @@
 <meta property="og:title" content="A Generalized Elo System for Tennis Players, part 2" />
 <meta name="author" content="Hong Suh" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account. (Surface-only) Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another. (Weighted average) Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error. (Surface-dependent K-factor) According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings." />
-<meta property="og:description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account. (Surface-only) Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another. (Weighted average) Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error. (Surface-dependent K-factor) According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings." />
+<meta name="description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account." />
+<meta property="og:description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account." />
 <link rel="canonical" href="http://localhost:4000/2020/08/13/tennis-2.html" />
 <meta property="og:url" content="http://localhost:4000/2020/08/13/tennis-2.html" />
 <meta property="og:site_name" content="In All Probably" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-13T00:00:00-07:00" />
 <script type="application/ld+json">
-{"headline":"A Generalized Elo System for Tennis Players, part 2","dateModified":"2020-08-13T00:00:00-07:00","datePublished":"2020-08-13T00:00:00-07:00","url":"http://localhost:4000/2020/08/13/tennis-2.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/13/tennis-2.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account. (Surface-only) Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another. (Weighted average) Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error. (Surface-dependent K-factor) According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"headline":"A Generalized Elo System for Tennis Players, part 2","dateModified":"2020-08-13T00:00:00-07:00","datePublished":"2020-08-13T00:00:00-07:00","url":"http://localhost:4000/2020/08/13/tennis-2.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/13/tennis-2.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
@@ -53,7 +53,7 @@ window.MathJax = {
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/portfolio.html">Portfolio</a><a class="page-link" href="/resume.html">Resume</a></div>
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
@@ -70,13 +70,13 @@ window.MathJax = {
   <div class="post-content e-content" itemprop="articleBody">
     <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
 
+<!--more-->
+
 <ol>
   <li><em>(Surface-only)</em> Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.</li>
   <li><em>(Weighted average)</em> Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error.</li>
   <li><em>(Surface-dependent K-factor)</em> According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings.</li>
 </ol>
-
-<!--more-->
 
 <p>The first and second are implemented by Jeff Sackmann, the tennis data god, where the weighted average is the actual average. (Actually on his website, he averages the raw Elo ratings themselves, but that’s fairly similar—though not identical—to what I described.) The third is the idea introduced in this post, which seems fairly natural to me and perhaps a little less ad-hoc than taking the average between surface-only and surface-agnostic ratings. So let’s explain how the surface-dependent K-factor (SDKF) model works.</p>
 

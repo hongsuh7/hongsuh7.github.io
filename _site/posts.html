@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Posts | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Posts" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A collection of math topics with lots of pictures and animations!" />
+<meta property="og:description" content="A collection of math topics with lots of pictures and animations!" />
+<link rel="canonical" href="http://localhost:4000/posts.html" />
+<meta property="og:url" content="http://localhost:4000/posts.html" />
+<meta property="og:site_name" content="In All Probably" />
+<script type="application/ld+json">
+{"headline":"Posts","url":"http://localhost:4000/posts.html","author":{"@type":"Person","name":"Hong Suh"},"description":"A collection of math topics with lots of pictures and animations!","@type":"WebPage","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <h1 id="blog-posts">Blog posts</h1>
+<ul>
+  
+    <li>
+      <a href="/2020/08/13/tennis-2.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 2</a>
+      <br />
+      <p style="font-size: 14px">August 13, 2020 </p>
+      <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/08/13/particles-1.html" style="font-size: 24px">A Visual Introduction to Interacting Particle Systems</a>
+      <br />
+      <p style="font-size: 14px">August 13, 2020 </p>
+      <p>An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/07/22/neural-ode-robustness.html" style="font-size: 24px">Testing Robustness of Neural ODEs against Adversarial Attacks</a>
+      <br />
+      <p style="font-size: 14px">July 22, 2020 </p>
+      <p>In my <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">last post</a>, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper <a href="https://arxiv.org/pdf/1910.05513.pdf">On Robustness of Neural Ordinary Differential Equations</a> (Yan et al).</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 24px">A Simple Introduction to Neural ODEs</a>
+      <br />
+      <p style="font-size: 14px">July 17, 2020 </p>
+      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/07/07/tennis-1.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 1</a>
+      <br />
+      <p style="font-size: 14px">July 07, 2020 </p>
+      <p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/06/29/smitten.html" style="font-size: 24px">Simulated Annealing and Smitten Ice Cream</a>
+      <br />
+      <p style="font-size: 14px">June 29, 2020 </p>
+      <p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
+
+
+      <hr />
+    </li>
+  
+</ul>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

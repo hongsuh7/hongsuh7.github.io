@@ -3,9 +3,9 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Home | In All Probably</title>
+<title>Portfolio | In All Probably</title>
 <meta name="generator" content="Jekyll v3.8.7" />
-<meta property="og:title" content="Home" />
+<meta property="og:title" content="Portfolio" />
 <meta name="author" content="Hong Suh" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A collection of math topics with lots of pictures and animations!" />
@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://localhost:4000/" />
 <meta property="og:site_name" content="In All Probably" />
 <script type="application/ld+json">
-{"headline":"Home","url":"http://localhost:4000/","name":"In All Probably","author":{"@type":"Person","name":"Hong Suh"},"description":"A collection of math topics with lots of pictures and animations!","@type":"WebSite","@context":"https://schema.org"}</script>
+{"headline":"Portfolio","url":"http://localhost:4000/","name":"In All Probably","author":{"@type":"Person","name":"Hong Suh"},"description":"A collection of math topics with lots of pictures and animations!","@type":"WebSite","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
@@ -51,188 +51,49 @@ window.MathJax = {
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Home</a><a class="page-link" href="/portfolio.html">Portfolio</a><a class="page-link" href="/resume.html">Resume</a></div>
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
       </nav></div>
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <ul>
-  
-    <li>
-      <a href="/2020/08/13/particles.html" style="font-size: 30px">A Visual Introduction to Interacting Particle Systems</a>
-      <p>An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</p>
+        <h1 id="intro">Intro</h1>
+<p>This is the homepage and blog of Hong Suh. Below is my portfolio; other information can be found in the tabs above.</p>
 
+<hr />
 
-    </li>
-  
-    <li>
-      <a href="/2020/08/13/tennis-2-5.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 2</a>
-      <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
-
+<h1 id="a-generalized-elo-system-for-tennis-players">A Generalized Elo System for Tennis Players</h1>
+<p>I built a generalized Elo rating system for tennis players which improves upon the model presented by <a href="https://fivethirtyeight.com/features/serena-williams-and-the-difference-between-all-time-great-and-greatest-of-all-time/">FiveThirtyEight</a>. The improvements are as follows.</p>
 <ol>
-  <li><em>(Surface-only)</em> Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.</li>
-  <li><em>(Weighted average)</em> Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error.</li>
-  <li><em>(Surface-dependent K-factor)</em> According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings.</li>
+  <li>I eliminate the need to set hyperparameters by hand. This makes my model more generalizable to other settings and less time-consuming to fine-tune.</li>
+  <li>I incorporate surface in a novel and natural way. 
+I improved log-loss error by 1.5% from FiveThirtyEight’s model for 2015-2019 test data.</li>
 </ol>
 
+<p>My Github repo is <a href="https://github.com/hongsuh7/tennis-elo">here</a>; my corresponding <a href="https://hongsuh7.github.io/2020/07/07/tennis-1.html">first post</a> and <a href="https://hongsuh7.github.io/2020/08/13/tennis-2.html">second post</a>. Below are some sample ratings as of end of 2019.</p>
 
-    </li>
-  
-    <li>
-      <a href="/2020/08/13/tennis-2.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 2</a>
-      <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+<p align="center">
+  <img width="400" height="180" src="/assets/tennis-2/ratings.png" />
+</p>
 
-<ol>
-  <li><em>(Surface-only)</em> Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.</li>
-  <li><em>(Weighted average)</em> Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error.</li>
-  <li><em>(Surface-dependent K-factor)</em> According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings.</li>
-</ol>
+<hr />
 
+<h1 id="robustness-of-neural-odes-in-progress">Robustness of Neural ODEs (in progress)</h1>
+<p>This is a deep learning research project. I conducted statistical tests to determine if decreasing step size in Neural ODE approximations results in increasing robustness against adversarial attacks. I concluded that step size has a significant statistical effect on robustness of Neural ODE approximations in certain settings.</p>
 
-    </li>
-  
-    <li>
-      <a href="/2020/08/13/particles-1.html" style="font-size: 30px">A Visual Introduction to Interacting Particle Systems</a>
-      <p>An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</p>
+<p>To further study this relationship, I set up an automated system which, at each iteration, chooses between 48 hyperparameter configurations, trains the model, then tests robustness. I am in the process of comparing the effects of certain hyperparameter changes to adversarial robustness. You can read my introduction to Neural ODEs <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">here</a> and a little bit about their adversarial robustness <a href="https://hongsuh7.github.io/2020/07/22/neural-ode-robustness.html">here</a>.</p>
 
+<p align="center">
+  <img width="800" height="250" src="/assets/robustness-tests.png" />
+</p>
 
-    </li>
-  
-    <li>
-      <a href="/2020/07/22/neural-ode-robustness.html" style="font-size: 30px">Testing Robustness of Neural ODEs against Adversarial Attacks</a>
-      <p>In my <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">last post</a>, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper <a href="https://arxiv.org/pdf/1910.05513.pdf">On Robustness of Neural Ordinary Differential Equations</a> (Yan et al).</p>
+<hr />
 
+<h1 id="fluctuations-of-an-exclusion-process">Fluctuations of an Exclusion Process</h1>
+<p>This was a pure math research project. I established quantitative bounds on the distribution of a statistic of an interacting particle system similar to the totally asymmetric simple exclusion process. My visual introduction to exclusion processes can be found <a href="https://hongsuh7.github.io/2020/08/13/particles-1.html">here</a>.</p>
 
-    </li>
-  
-    <li>
-      <a href="/2020/07/22/neural-ode-robustness.html" style="font-size: 30px">Testing Robustness of Neural ODEs against Adversarial Attacks</a>
-      <p>In my <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">last post</a>, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper <a href="https://arxiv.org/pdf/1910.05513.pdf">On Robustness of Neural Ordinary Differential Equations</a> (Yan et al).</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 30px">A Simple Introduction to Neural ODEs</a>
-      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 30px">A Simple Introduction to Neural ODEs</a>
-      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/07/10/tennis-2.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 2</a>
-      <p>In this post, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/07/10/tennis-1.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 1</a>
-      <h2 id="introduction">Introduction</h2>
-
-<p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/07/07/tennis-1.html" style="font-size: 30px">A Generalized Elo System for Tennis Players, part 1</a>
-      <p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/06/29/smitten-2.html" style="font-size: 30px">Is Smitten Ice Cream Really That Creamy?: Ising Model</a>
-      <h2 id="ising-model">Ising Model</h2>
-
-<p>We’d be doing the simulated annealing algorithm a disservice if we failed to give any mention to the Ising model.</p>
-
-<h2 id="probability-distributions">Probability Distributions</h2>
-
-<p>The phrase <code class="highlighter-rouge">a probability distribution on the set of particle configurations</code> is a mouthful, but the idea is simple: assign a probability to each particle configuration. For example,</p>
-
-<!-- insert here -->
-
-<p>There are many different probability distributions we can put on any $B_n$. Most are not physically meaningful. For example, I could define a probability distribution on $B_2$ as follows.</p>
-
-<!-- insert here -->
-
-<p>Sure, this is a probability distribution. But it is not very useful because it has no connection to physical reality. This is where <em>energy</em> comes in.</p>
-
-<!-- insert here -->
-
-<p>It is useful to think about the extremes of $\beta$. If $\beta=0$, then every particle configuration is equally likely, no matter their energies. If $\beta=\infty$, then the lowest-energy particle configuration has probability one while the others have probability zero. (If there are many lowest-energy configurations, they all have the same probability.) The parameter $\beta$ has an important physical meaning which we will describe now.</p>
-
-<h2 id="inverse-temperature">Inverse Temperature</h2>
-<p>The parameter $\beta$ is often called <em>inverse temperature</em>.</p>
-
-    </li>
-  
-    <li>
-      <a href="/2020/06/29/smitten-1.html" style="font-size: 30px">Simulated Annealing and Smitten Ice Cream</a>
-      <h2 id="introduction">Introduction</h2>
-
-<p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
-
-
-    </li>
-  
-    <li>
-      <a href="/2020/06/29/smitten.html" style="font-size: 30px">Simulated Annealing and Smitten Ice Cream</a>
-      <p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
-
-
-    </li>
-  
-</ul>
-
-<!--
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/hongsuh7/hongsuh7.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hongsuh7/hongsuh7.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
--->
+<p align="center">
+  <img width="480" height="320" src="/assets/particles-1/tasep_scale.gif" />
+</p>
 
       </div>
     </main><footer class="site-footer h-card">

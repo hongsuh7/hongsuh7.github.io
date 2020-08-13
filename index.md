@@ -1,53 +1,41 @@
 ---
 layout: default
-title: Home
+title: Portfolio
 ---
 
-<ul>
-  {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}" style="font-size: 30px">{{ post.title }}</a>
-      {{ post.excerpt }}
-    </li>
-  {% endfor %}
-</ul>
+# Intro
+This is the homepage and blog of Hong Suh. Below is my portfolio; other information can be found in the tabs above.
 
-<!--
-## Welcome to GitHub Pages
+<hr>
 
-You can use the [editor on GitHub](https://github.com/hongsuh7/hongsuh7.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+# A Generalized Elo System for Tennis Players
+I built a generalized Elo rating system for tennis players which improves upon the model presented by [FiveThirtyEight](https://fivethirtyeight.com/features/serena-williams-and-the-difference-between-all-time-great-and-greatest-of-all-time/). The improvements are as follows.
+1. I eliminate the need to set hyperparameters by hand. This makes my model more generalizable to other settings and less time-consuming to fine-tune.
+2. I incorporate surface in a novel and natural way. 
+I improved log-loss error by 1.5% from FiveThirtyEight's model for 2015-2019 test data.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+My Github repo is [here](https://github.com/hongsuh7/tennis-elo); my corresponding [first post](https://hongsuh7.github.io/2020/07/07/tennis-1.html) and [second post](https://hongsuh7.github.io/2020/08/13/tennis-2.html). Below are some sample ratings as of end of 2019.
 
-### Markdown
+<p align="center">
+  <img width="400" height="180" src="/assets/tennis-2/ratings.png">
+</p>
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+<hr>
 
-```markdown
-Syntax highlighted code block
+# Robustness of Neural ODEs (in progress)
+This is a deep learning research project. I conducted statistical tests to determine if decreasing step size in Neural ODE approximations results in increasing robustness against adversarial attacks. I concluded that step size has a significant statistical effect on robustness of Neural ODE approximations in certain settings. 
 
-# Header 1
-## Header 2
-### Header 3
+To further study this relationship, I set up an automated system which, at each iteration, chooses between 48 hyperparameter configurations, trains the model, then tests robustness. I am in the process of comparing the effects of certain hyperparameter changes to adversarial robustness. You can read my introduction to Neural ODEs [here](https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html) and a little bit about their adversarial robustness [here](https://hongsuh7.github.io/2020/07/22/neural-ode-robustness.html).
 
-- Bulleted
-- List
+<p align="center">
+  <img width="800" height="250" src="/assets/robustness-tests.png">
+</p>
 
-1. Numbered
-2. List
+<hr>
 
-**Bold** and _Italic_ and `Code` text
+# Fluctuations of an Exclusion Process
+This was a pure math research project. I established quantitative bounds on the distribution of a statistic of an interacting particle system similar to the totally asymmetric simple exclusion process. My visual introduction to exclusion processes can be found [here](https://hongsuh7.github.io/2020/08/13/particles-1.html).
 
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/hongsuh7/hongsuh7.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
--->
+<p align="center">
+  <img width="480" height="320" src="/assets/particles-1/tasep_scale.gif">
+</p>
