@@ -12,9 +12,8 @@ This is the homepage and blog of Hong Suh. Below is my portfolio; other informat
 I built a generalized Elo rating system for tennis players which improves upon the model presented by [FiveThirtyEight](https://fivethirtyeight.com/features/serena-williams-and-the-difference-between-all-time-great-and-greatest-of-all-time/). The improvements are as follows.
 1. I eliminate the need to set hyperparameters by hand. This makes my model more generalizable to other settings and less time-consuming to fine-tune.
 2. I incorporate surface in a novel and natural way. 
-I improved log-loss error by 1.5% from FiveThirtyEight's model for 2015-2019 test data.
 
-My Github repo is [here](https://github.com/hongsuh7/tennis-elo); my corresponding [first post](https://hongsuh7.github.io/2020/07/07/tennis-1.html) and [second post](https://hongsuh7.github.io/2020/08/13/tennis-2.html). Below are some sample ratings as of end of 2019.
+I decreased log-loss error by 1.5% from FiveThirtyEight's model for 2015-2019 test data. My Github repo is [here](https://github.com/hongsuh7/tennis-elo); my corresponding [first post](https://hongsuh7.github.io/2020/07/07/tennis-1.html) and [second post](https://hongsuh7.github.io/2020/08/13/tennis-2.html). Below are some sample ratings as of end of 2019.
 
 <p align="center">
   <img width="400" height="180" src="/assets/tennis-2/ratings.png">
