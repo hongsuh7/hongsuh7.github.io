@@ -60,6 +60,52 @@ window.MathJax = {
 <ul>
   
     <li>
+      <a href="/2020/08/17/sampling-bias.html" style="font-size: 24px">Collecting Data on Google Colab: Sampling Bias</a>
+      <br />
+      <p style="font-size: 14px">August 17, 2020 </p>
+      <p>I’ve been doing research on approximate Neural ODE models. I set up a system to pick a set of hyperparameters uniformly randomly from a collection of them, evaluate the accuracy of the model under various adversarial attacks, and save the results. I figured this system would get approximately similar numbers of samples from each set of hyperparameters. What I didn’t take into account is <em>sampling bias</em>. In fact, since I’m running my system on Google Colab, sampling bias ensures that I am not sampling uniformly.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/08/15/police.html" style="font-size: 24px">NYPD Police Misconduct</a>
+      <br />
+      <p style="font-size: 14px">August 15, 2020 </p>
+      <p>After the killing of George Floyd and the resulting civil unrest, demand for police accountability increased all over the nation. As a result, New York <a href="https://www.innocenceproject.org/in-a-historic-victory-the-new-york-legislature-repeals-50-a-requiring-full-disclosure-of-police-disciplinary-records/">recently repealed</a> a statute barring access to police disciplinary records, and ProPublica released a <a href="https://www.propublica.org/datastore/dataset/civilian-complaints-against-new-york-city-police-officers">dataset</a> of police misconduct cases in July 2020. We’ll examine this dataset along with payroll and GIS data.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/08/13/particles.html" style="font-size: 24px">A Visual Introduction to Interacting Particle Systems</a>
+      <br />
+      <p style="font-size: 14px">August 13, 2020 </p>
+      <p>An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/08/13/tennis-2-5.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 2</a>
+      <br />
+      <p style="font-size: 14px">August 13, 2020 </p>
+      <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+
+<ol>
+  <li><em>(Surface-only)</em> Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.</li>
+  <li><em>(Weighted average)</em> Take the surface-specific ratings in item 1 above and the all-surfaces ratings developed in our previous post, then take a weighted average of them, minimizing the log-loss error.</li>
+  <li><em>(Surface-dependent K-factor)</em> According to the surface being played on, update each player’s surface-specific rating according to a different K-factor and take the win probability from the corresponding surface-specific ratings.</li>
+</ol>
+
+
+      <hr />
+    </li>
+  
+    <li>
       <a href="/2020/08/13/tennis-2.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 2</a>
       <br />
       <p style="font-size: 14px">August 13, 2020 </p>
@@ -90,6 +136,16 @@ window.MathJax = {
     </li>
   
     <li>
+      <a href="/2020/07/22/neural-ode-robustness.html" style="font-size: 24px">Testing Robustness of Neural ODEs against Adversarial Attacks</a>
+      <br />
+      <p style="font-size: 14px">July 22, 2020 </p>
+      <p>In my <a href="https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html">last post</a>, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper <a href="https://arxiv.org/pdf/1910.05513.pdf">On Robustness of Neural Ordinary Differential Equations</a> (Yan et al).</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
       <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 24px">A Simple Introduction to Neural ODEs</a>
       <br />
       <p style="font-size: 14px">July 17, 2020 </p>
@@ -100,10 +156,84 @@ window.MathJax = {
     </li>
   
     <li>
+      <a href="/2020/07/17/neural-ode-intro.html" style="font-size: 24px">A Simple Introduction to Neural ODEs</a>
+      <br />
+      <p style="font-size: 14px">July 17, 2020 </p>
+      <p>You might have heard some hype around <a href="https://arxiv.org/pdf/1806.07366.pdf">neural ordinary differential equations</a> (Neural ODEs). The idea of using a continuous process to model a discrete one is very fundamental in many parts of mathematics, so I was excited to learn about this stuff. Even though the code from the original paper is available online, I couldn’t find a simple high-level explanation + implementation of neural ODEs on a simple dataset. In this post, I’ll explain the idea behind and purported advantages of Neural ODEs and create a MNIST classifier using a Neural ODE.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/07/10/tennis-2.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 2</a>
+      <br />
+      <p style="font-size: 14px">July 10, 2020 </p>
+      <p>In this post, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/07/10/tennis-1.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 1</a>
+      <br />
+      <p style="font-size: 14px">July 10, 2020 </p>
+      <h2 id="introduction">Introduction</h2>
+
+<p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
       <a href="/2020/07/07/tennis-1.html" style="font-size: 24px">A Generalized Elo System for Tennis Players, part 1</a>
       <br />
       <p style="font-size: 14px">July 07, 2020 </p>
       <p>Here, we will create an Elo rating system for male tennis players and do some analysis on the choice of parameters. We find that a random choice of parameters actually does quite well, and that a wide variety of K-factor weight functions do a good job predicting the outcomes of tennis matches. In future notebooks, we will further expand upon this model by adding various features.</p>
+
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/06/29/smitten-2.html" style="font-size: 24px">Is Smitten Ice Cream Really That Creamy?: Ising Model</a>
+      <br />
+      <p style="font-size: 14px">June 29, 2020 </p>
+      <h2 id="ising-model">Ising Model</h2>
+
+<p>We’d be doing the simulated annealing algorithm a disservice if we failed to give any mention to the Ising model.</p>
+
+<h2 id="probability-distributions">Probability Distributions</h2>
+
+<p>The phrase <code class="highlighter-rouge">a probability distribution on the set of particle configurations</code> is a mouthful, but the idea is simple: assign a probability to each particle configuration. For example,</p>
+
+<!-- insert here -->
+
+<p>There are many different probability distributions we can put on any $B_n$. Most are not physically meaningful. For example, I could define a probability distribution on $B_2$ as follows.</p>
+
+<!-- insert here -->
+
+<p>Sure, this is a probability distribution. But it is not very useful because it has no connection to physical reality. This is where <em>energy</em> comes in.</p>
+
+<!-- insert here -->
+
+<p>It is useful to think about the extremes of $\beta$. If $\beta=0$, then every particle configuration is equally likely, no matter their energies. If $\beta=\infty$, then the lowest-energy particle configuration has probability one while the others have probability zero. (If there are many lowest-energy configurations, they all have the same probability.) The parameter $\beta$ has an important physical meaning which we will describe now.</p>
+
+<h2 id="inverse-temperature">Inverse Temperature</h2>
+<p>The parameter $\beta$ is often called <em>inverse temperature</em>.</p>
+
+      <hr />
+    </li>
+  
+    <li>
+      <a href="/2020/06/29/smitten-1.html" style="font-size: 24px">Simulated Annealing and Smitten Ice Cream</a>
+      <br />
+      <p style="font-size: 14px">June 29, 2020 </p>
+      <h2 id="introduction">Introduction</h2>
+
+<p>I live in Oakland, about a mile away from a <a href="https://www.smittenicecream.com">Smitten Ice Cream</a> store. Their selling point is their super-fast liquid nitrogen made-to-order ice cream. They claim that the ice cream, which is turned solid from liquid in 90 seconds, is creamier than regular ice cream. The validity of the scientific basis of this claim, I can’t answer, but I can make a simple mathematical model, derived from physical principles, to simulate the comparison between Smitten-made ice cream and regular ice cream.</p>
 
 
       <hr />

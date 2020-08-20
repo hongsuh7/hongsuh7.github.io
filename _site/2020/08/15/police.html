@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>NYPD Police Misconduct | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="NYPD Police Misconduct" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="After the killing of George Floyd and the resulting civil unrest, demand for police accountability increased all over the nation. As a result, New York recently repealed a statute barring access to police disciplinary records, and ProPublica released a dataset of police misconduct cases in July 2020. We’ll examine this dataset along with payroll and GIS data." />
+<meta property="og:description" content="After the killing of George Floyd and the resulting civil unrest, demand for police accountability increased all over the nation. As a result, New York recently repealed a statute barring access to police disciplinary records, and ProPublica released a dataset of police misconduct cases in July 2020. We’ll examine this dataset along with payroll and GIS data." />
+<link rel="canonical" href="http://localhost:4000/2020/08/15/police.html" />
+<meta property="og:url" content="http://localhost:4000/2020/08/15/police.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-15T17:27:06-07:00" />
+<script type="application/ld+json">
+{"headline":"NYPD Police Misconduct","dateModified":"2020-08-15T17:27:06-07:00","datePublished":"2020-08-15T17:27:06-07:00","url":"http://localhost:4000/2020/08/15/police.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/15/police.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"After the killing of George Floyd and the resulting civil unrest, demand for police accountability increased all over the nation. As a result, New York recently repealed a statute barring access to police disciplinary records, and ProPublica released a dataset of police misconduct cases in July 2020. We’ll examine this dataset along with payroll and GIS data.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">NYPD Police Misconduct</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-08-15T17:27:06-07:00" itemprop="datePublished">
+        Aug 15, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>After the killing of George Floyd and the resulting civil unrest, demand for police accountability increased all over the nation. As a result, New York <a href="https://www.innocenceproject.org/in-a-historic-victory-the-new-york-legislature-repeals-50-a-requiring-full-disclosure-of-police-disciplinary-records/">recently repealed</a> a statute barring access to police disciplinary records, and ProPublica released a <a href="https://www.propublica.org/datastore/dataset/civilian-complaints-against-new-york-city-police-officers">dataset</a> of police misconduct cases in July 2020. We’ll examine this dataset along with payroll and GIS data.
+<!--more-->
+There are many efforts to document police misconduct in the US. <a href="https://www.capstat.nyc/">CAPstat</a> is another project that aimed to shed light on police data before the restrictive statute was repealed. <a href="https://project.wnyc.org/disciplinary-records/">Other states</a> also allow access to police disciplinary records, but the data has not been curated yet. The data is supposed to be publicly accessible, but it seems to be one of those things that is technically true but practically difficult to obtain. Seems like you have to go into an archive in person and hand-write notes if you want to do get the data for free. Thank you ProPublica for doing all the hard work for the NYPD dataset!</p>
+
+<h2 id="wheres-the-data">Where’s the data?</h2>
+
+<p>The main dataset is the ProPublica dataset, linked above. They did the hard work of requesting and transforming the data through legal barriers. But there are other related datasets to study. If the ProPublica dataset is the sun, then the planets would be the NYC public payroll data, NYPD police precinct map data, NYC crime data, NYPD officer data, and more. Below, I will present examples of such data we can use to augment the ProPublica dataset and our analysis.</p>
+
+<h2 id="features">Features</h2>
+
+<p>There are three main features I will certainly build, and others that I have yet to completely scope out. I will present a sneak peek of each feature below.</p>
+<ol>
+  <li><em>Geographic visualization.</em> I will build a compelling visualization of police activity and disciplinary records in the NYC geography, from 1985 to 2020.</li>
+  <li><em>Aggregate analysis of officers.</em> I will build tools for users to view and interact with aggregate analysis of police officers. For example, I may build a tool for users to observe behaviors of Asian officers, or male officers, or old officers. Users may be able to discern new groups of police officers (wait for the sneak peek).</li>
+  <li><em>Individual analysis of officers.</em> I will build tools for users to view and interact with the public history of individual police officers.</li>
+</ol>
+
+<h2 id="sneak-peeks">Sneak peeks</h2>
+
+<h3 id="geographic-analysis">Geographic analysis</h3>
+
+<p>Click this <a href="https://hongsuh7.github.io/precinct.html">link</a> to see an interactive visualization of allegations against police by precinct. I learned while building this plot that the NYPD 75th precinct is <a href="https://en.wikipedia.org/wiki/The_Seven_Five">infamous</a> for the police corruption that took place in it during the 1980s.</p>
+
+<h3 id="aggregate-analysis-of-officers">Aggregate analysis of officers</h3>
+
+<p>Are there distinct “types” of police officers that we can identify with our data? For example, there may be officers who have high rates of allegations of verbal abuse, but are surprisingly nonviolent; or there may be officers who have higher rates of use of force than other officers with similar numbers of allegations. A simple k-means clustering on officers based on number of allegations and proportions of types of allegations yields interesting results.</p>
+
+<p><img src="main_files/figure-markdown_github/unnamed-chunk-3-1.png" alt="" /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    ##       abuse       rude       lang      force
+    ## 1 0.4495329 0.32141697 0.04601956 0.18303057
+    ## 2 0.6020816 0.09685358 0.01535157 0.28571323
+    ## 3 0.2491451 0.17291401 0.02955641 0.54838447
+    ## 4 0.8401839 0.07994415 0.00935996 0.07051199
+</code></pre></div></div>
+<p>We can roughly see different types of officers. Cluster 3 seems to consist of officers who use a lot of force. Cluster 4 seems to consist of officers who commit abuse of authority but are not generally violent. And so on.</p>
+
+<h3 id="individual-analysis-of-officers">Individual analysis of officers</h3>
+
+<p>Click this <a href="https://hongsuh7.github.io/payroll.html">link</a> to see plots of compensation of an officer with 43 allegations from 2014-2019 versus that of a same-rank officer with no allegations. (Note that about 90% of NYPD officers have no allegations against them.) We all hear that police officers get away with misconduct, but it is another thing to see this plot and realize that allegations, even if substantiated, have absolutely no impact on officer compensation.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>I demonstrated three new ways to use data from different sources to shed light on police misconduct. The final product will occupy a niche that is currently empty – that of interactive, flexible, and visual statistical information about police misconduct. Any work in this direction is of interest to the public, whose eyes are all over American police right now, and urgent, because political momentum is not easy to maintain.</p>
+
+  </div><a class="u-url" href="/2020/08/15/police.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

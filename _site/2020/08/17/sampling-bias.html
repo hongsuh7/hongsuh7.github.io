@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Collecting Data on Google Colab: Sampling Bias | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Collecting Data on Google Colab: Sampling Bias" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I’ve been doing research on approximate Neural ODE models. I set up a system to pick a set of hyperparameters uniformly randomly from a collection of them, evaluate the accuracy of the model under various adversarial attacks, and save the results. I figured this system would get approximately similar numbers of samples from each set of hyperparameters. What I didn’t take into account is sampling bias. In fact, since I’m running my system on Google Colab, sampling bias ensures that I am not sampling uniformly." />
+<meta property="og:description" content="I’ve been doing research on approximate Neural ODE models. I set up a system to pick a set of hyperparameters uniformly randomly from a collection of them, evaluate the accuracy of the model under various adversarial attacks, and save the results. I figured this system would get approximately similar numbers of samples from each set of hyperparameters. What I didn’t take into account is sampling bias. In fact, since I’m running my system on Google Colab, sampling bias ensures that I am not sampling uniformly." />
+<link rel="canonical" href="http://localhost:4000/2020/08/17/sampling-bias.html" />
+<meta property="og:url" content="http://localhost:4000/2020/08/17/sampling-bias.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-17T17:07:44-07:00" />
+<script type="application/ld+json">
+{"headline":"Collecting Data on Google Colab: Sampling Bias","dateModified":"2020-08-17T17:07:44-07:00","datePublished":"2020-08-17T17:07:44-07:00","url":"http://localhost:4000/2020/08/17/sampling-bias.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/17/sampling-bias.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"I’ve been doing research on approximate Neural ODE models. I set up a system to pick a set of hyperparameters uniformly randomly from a collection of them, evaluate the accuracy of the model under various adversarial attacks, and save the results. I figured this system would get approximately similar numbers of samples from each set of hyperparameters. What I didn’t take into account is sampling bias. In fact, since I’m running my system on Google Colab, sampling bias ensures that I am not sampling uniformly.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Collecting Data on Google Colab: Sampling Bias</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-08-17T17:07:44-07:00" itemprop="datePublished">
+        Aug 17, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I’ve been doing research on approximate Neural ODE models. I set up a system to pick a set of hyperparameters uniformly randomly from a collection of them, evaluate the accuracy of the model under various adversarial attacks, and save the results. I figured this system would get approximately similar numbers of samples from each set of hyperparameters. What I didn’t take into account is <em>sampling bias</em>. In fact, since I’m running my system on Google Colab, sampling bias ensures that I am not sampling uniformly.</p>
+
+<!--more-->
+
+<p>The thing about Google Colab is that, because it’s free (or low-cost with Colab Pro), there is a limit on your runtime. You get kicked out, guaranteed, after 12 hours (24 hour for Colab Pro) on a machine so that you have to reconnect and re-run your program. On average, for one reason or another, I’m cutting my program off after about 6 hours of running. This means that the hyperparameter sets which take longer to train are more likely to be the ones cut off. This phenomenon is called <em>sampling bias</em>. I’m not picking a hyperparameter set uniformly; I’m picking a <em>time</em> “uniformly,” then picking the hyperparameter set corresponding to that time. This subtlety is the reason that my choice is not uniform among all the hyperparameter sets.</p>
+
+<p>Let’s examine a simple example, then set clear assumptions for our setting so that we can run simulations to see how far off we are from uniform sampling.</p>
+
+<h1 id="simple-example-lightbulbs">Simple example: lightbulbs</h1>
+
+<p>Suppose I have a room with a single light which is on perpetually. I need this light on at all costs; whenever the lightbulb burns out, I immediately replace it with another. In my stock, I have two types of lightbulbs which are indistinguishable (I spilled them all at an earlier point and put them all in one box). Lightbulb A has an average lifespan of 5 years, and lightbulb B has an average lifespan of 1 second. The standard setting is that both lightbulb lifespans are exponential random variables.</p>
+
+<p>When a lightbulb burns out, I choose one of the two types of lightbulbs with equal probability. However, if a guest happens to walk into the room at some point in the future, in all probably, the lightbulb in the light will be of type A.</p>
+
+<h1 id="our-example">Our example</h1>
+
+<p>Suppose we have two sets of hyperparameters: A, which runs at 300 seconds, and B, which runs at 1800 seconds. Our units will be in minutes. So let’s say ++A_i \sim \text{Exp}(1/5), \quad B_i \sim \text{Exp}(1/30),++ where $A_i,B_i$ are iid and are the time required to run the $i$th training of $A$ and $B$ respectively. There is also the cutting-off process, which, say, is kind of an exponential random variable. Let’s say the $T_i$ is the time between the $i$th and $(i+1)$th cutoff time. Our rule is that ++ X_i \sim \text{Exp}(1/360), \quad T_i = \min\{X_i, 720\},++ since Google Colab has a maximum runtime of 12 hours (which is 720 minutes).</p>
+
+<p>Whenever a training completes <em>or</em> gets cut off, we begin a new one picking from $\{A,B\}$, each with probability 1/2. <strong>As time goes to infinity, what is the proportion of A’s among all completed trainings?</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>n &lt;- 1000
+
+a &lt;- rexp(n = n, rate = 1/6)
+b &lt;- rexp(n = n, rate = 1/30)
+
+t &lt;- pmin(rexp(n = n, rate = 1/360), 720)
+
+t &lt;- cumsum(t)
+</code></pre></div></div>
+
+
+  </div><a class="u-url" href="/2020/08/17/sampling-bias.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
