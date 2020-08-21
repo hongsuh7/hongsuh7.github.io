@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1597898678 "resume_bullet.tex" "resume_bullet.pdf" "resume_bullet" 1597898679
+["pdflatex"] 1598041723 "resume_bullet.tex" "resume_bullet.pdf" "resume_bullet" 1598041724
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -67,11 +67,11 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1557342086 4259635 562fc36ec496993777a6c428d8bfb811 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "resume_bullet.aux" 1597898679 1250 2de54353d323b56dc4132ffc46d51de0 "pdflatex"
-  "resume_bullet.out" 1597898679 308 0dba0f499539a4bbc0c62a6f82270318 "pdflatex"
-  "resume_bullet.tex" 1597898678 12401 d9f1b3cd90e1ea825336ff9e2e13a580 ""
+  "resume_bullet.aux" 1598041724 1250 2de54353d323b56dc4132ffc46d51de0 "pdflatex"
+  "resume_bullet.out" 1598041724 308 0dba0f499539a4bbc0c62a6f82270318 "pdflatex"
+  "resume_bullet.tex" 1598041721 12395 5ac1dbc544051efd18b4281a662f2fb2 ""
   (generated)
-  "resume_bullet.aux"
-  "resume_bullet.log"
   "resume_bullet.out"
   "resume_bullet.pdf"
+  "resume_bullet.log"
+  "resume_bullet.aux"
