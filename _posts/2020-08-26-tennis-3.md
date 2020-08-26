@@ -1,0 +1,16 @@
+---
+layout: post
+title:  "A Generalized Elo System for Tennis Players, Graphics"
+excerpt_separator: <!--more-->
+---
+
+Here is a graphic of the Big Four (Federer, Nadal, Djokovic, Murray) ratings according to my [Elo system](https://hongsuh7.github.io/2020/08/13/tennis-2.html).
+
+<!--more-->
+
+<iframe src="/assets/tennis-3/big4.html" title="Big Four Ratings" height="600px" width="750px"></iframe>
+
+A couple of notes:
+1. A surface rating should not be compared with a different surface rating because it's not guaranteed that each surface rating has a similar mean across all players. Just because Nadal's clay rating is higher than his hard court rating doesn't mean he is better at clay, though indeed his clay rating is higher than his hard rating and indeed he is better at clay than hard.
+2. Elo ratings actually probably do a relatively poor job of predicting matches for players as elite as the Big Four. For example, everyone knows Nadal's at a different level when it comes to clay, but his clay rating is not that much higher than the others' ratings. You can actually see when the clay season is, because his clay rating shoots up during clay season then falls down during the other seasons. For basically all other players on earth, the non-clay season performances are good predictors of clay season performance, which is why the Elo system adapted this way. But not for Nadal.
+3. When players don't play matches, their rating stays the same. Since Andy Murray hasn't played many matches since his injury, his rating is inflated; it hasn't caught up with his injury yet. It would be interesting to augment this simple prediction model with increasing layers of data, such as injury data.

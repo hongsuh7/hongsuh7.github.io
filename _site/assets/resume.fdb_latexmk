@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1597719012 "resume.tex" "resume.pdf" "resume" 1597719013
+["pdflatex"] 1597775229 "resume.tex" "resume.pdf" "resume" 1597775230
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -64,11 +64,11 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1557342086 4259635 562fc36ec496993777a6c428d8bfb811 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "resume.aux" 1597719013 1250 2de54353d323b56dc4132ffc46d51de0 "pdflatex"
-  "resume.out" 1597719013 308 0dba0f499539a4bbc0c62a6f82270318 "pdflatex"
-  "resume.tex" 1597719012 10343 df4f6d0a61cf41391698ed7f194aa7dd ""
+  "resume.aux" 1597775230 1250 2de54353d323b56dc4132ffc46d51de0 "pdflatex"
+  "resume.out" 1597775230 308 0dba0f499539a4bbc0c62a6f82270318 "pdflatex"
+  "resume.tex" 1597775228 10360 648dae59332920f5c355c886b24b2177 ""
   (generated)
-  "resume.out"
-  "resume.log"
   "resume.pdf"
   "resume.aux"
+  "resume.out"
+  "resume.log"
