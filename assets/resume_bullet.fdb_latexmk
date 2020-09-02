@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1598306779 "resume_bullet.tex" "resume_bullet.pdf" "resume_bullet" 1598306780
+["pdflatex"] 1599076735 "resume_bullet.tex" "resume_bullet.pdf" "resume_bullet" 1599076737
   "/usr/local/texlive/2019/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2019/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
@@ -25,7 +25,6 @@
   "/usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1248133631 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "/usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1248133631 31099 c85edf1dd5b9e826d67c9c7293b6786c ""
-  "/usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb" 1248133631 31764 459c573c03a4949a528c2cc7f557e217 ""
   "/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1461363279 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty" 1284331290 1458 43ab4710dc82f3edeabecd0d099626b2 ""
   "/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty" 1463608860 8237 3b62ef1f7e2c23a328c814b3893bc11f ""
@@ -44,7 +43,6 @@
   "/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsopn.sty" 1523134290 4116 32e6abd27229755a83a8b7f18e583890 ""
   "/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amstext.sty" 1523134290 2432 8ff93b1137020e8f21930562a874ae66 ""
   "/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls" 1544567569 19933 3097d1b31d3c45dc957096f554529032 ""
-  "/usr/local/texlive/2019/texmf-dist/tex/latex/base/omscmr.fd" 1523050425 2472 aa08940f0a4dc6c24ae9f943b04ae0b9 ""
   "/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo" 1544567569 8294 6d6e23d5169c0d89d173f6c7e08a005a ""
   "/usr/local/texlive/2019/texmf-dist/tex/latex/comment/comment.sty" 1472166125 10197 204f75d5d8d88aa345a8c402e879e63b ""
   "/usr/local/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty" 1525727744 41645 0653033a985e06c69a2a9cea9a95e31a ""
@@ -67,11 +65,11 @@
   "/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1557342064 3277517 23507ed665b4dd9046f0f2a94bbef2be ""
   "/usr/local/texlive/2019/texmf-var/web2c/pdftex/pdflatex.fmt" 1557342086 4259635 562fc36ec496993777a6c428d8bfb811 ""
   "/usr/local/texlive/2019/texmf.cnf" 1557341546 577 d150fef99ac436ad1156e86b0892f6ef ""
-  "resume_bullet.aux" 1598306780 1250 e943c7b5f73e088f9710f7d44a887cbf "pdflatex"
-  "resume_bullet.out" 1598306780 308 8a87ead87eee08ee84dde606022a0e42 "pdflatex"
-  "resume_bullet.tex" 1598306777 12597 50c2f1d767b7f742aa1edc86967740a5 ""
+  "resume_bullet.aux" 1599076736 1045 648604fcc305ff3f9d1d232c37bd1e28 "pdflatex"
+  "resume_bullet.out" 1599076736 195 bcbf2df640097ed05ed5a837e62b5d33 "pdflatex"
+  "resume_bullet.tex" 1599076735 14361 b73516fcc08c433c06cfabee19f19594 ""
   (generated)
-  "resume_bullet.aux"
-  "resume_bullet.pdf"
   "resume_bullet.out"
   "resume_bullet.log"
+  "resume_bullet.aux"
+  "resume_bullet.pdf"
