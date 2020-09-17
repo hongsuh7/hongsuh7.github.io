@@ -23,10 +23,10 @@ I built a generalized Elo rating system for tennis players which improves upon t
 
 <hr>
 
-# Robustness of Neural ODEs (in progress)
-This is a deep learning research project. I conducted statistical tests to determine if decreasing step size in Neural ODE approximations results in increasing robustness against adversarial attacks. I concluded that step size has a significant statistical effect on robustness of Neural ODE approximations in certain settings. 
+# Robustness of Neural ODEs
+This was a deep learning research project. I conducted statistical tests to determine if decreasing step size in Neural ODE approximations results in increasing robustness against adversarial attacks. I concluded that step size has a significant, but not gigantic, statistical effect on robustness of Neural ODE approximations in certain settings. 
 
-To further study this relationship, I set up an automated system which, at each iteration, chooses between 48 hyperparameter configurations, trains the model, then tests robustness. I am in the process of comparing the effects of certain hyperparameter changes to adversarial robustness. You can read my introduction to Neural ODEs [here](https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html) and a little bit about their adversarial robustness [here](https://hongsuh7.github.io/2020/07/22/neural-ode-robustness.html).
+You can read my introduction to Neural ODEs [here](https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html) and a little bit about their adversarial robustness [here](https://hongsuh7.github.io/2020/07/22/neural-ode-robustness.html).
 
 <p align="center">
   <img width="800" height="250" src="/assets/robustness-tests.png">
