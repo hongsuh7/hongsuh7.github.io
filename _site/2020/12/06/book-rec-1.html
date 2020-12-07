@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Bookender: A Book Recommendation System | In All Probably</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Bookender: A Book Recommendation System" />
+<meta name="author" content="Hong Suh" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I built a book recommendation system over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it." />
+<meta property="og:description" content="I built a book recommendation system over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it." />
+<link rel="canonical" href="http://localhost:4000/2020/12/06/book-rec-1.html" />
+<meta property="og:url" content="http://localhost:4000/2020/12/06/book-rec-1.html" />
+<meta property="og:site_name" content="In All Probably" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-06T18:08:15-08:00" />
+<script type="application/ld+json">
+{"headline":"Bookender: A Book Recommendation System","dateModified":"2020-12-06T18:08:15-08:00","datePublished":"2020-12-06T18:08:15-08:00","url":"http://localhost:4000/2020/12/06/book-rec-1.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/12/06/book-rec-1.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"I built a book recommendation system over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook('TeX Jax Ready', function () {
+  MathJax.InputJax.TeX.prefilterHooks.Add(function (data) {
+    data.math = data.math.replace(/^% <!\[CDATA\[/, '').replace(/%\]\]>$/, '');
+  });
+});
+</script>-->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$']],
+    displayMath: [["++","++"]]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+</script></head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">In All Probably</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about.html">About</a><a class="page-link" href="/">Portfolio</a><a class="page-link" href="/posts.html">Posts</a><a class="page-link" href="/resume.html">Resume</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Bookender: A Book Recommendation System</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-12-06T18:08:15-08:00" itemprop="datePublished">
+        Dec 6, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>I built a <a href="https://bookending.herokuapp.com">book recommendation system</a> over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it.</p>
+
+<!--more-->
+
+<h1 id="design">Design</h1>
+
+<p>I wanted to build something lightweight for two reasons: first, it’s easier to build; and second, I use Goodreads and, while it has everything it needs to make good recommendations, it’s too clunky for that purpose and so I don’t use it for recs.</p>
+
+<p>My app would simply take a list of liked and disliked books from the user and return a list of recommendations after some optional user filtering. Pretty simple.</p>
+
+<h1 id="data">Data</h1>
+
+<p>First, I needed lots of user rating data and book data. Thankfully, the horrible design of Goodreads makes it fairly easy to collect these data. The url <code class="highlighter-rouge">https://www.goodreads.com/user/show/{i}</code> gives you information about the $i$th user. And it’s chronological. Can’t believe they did that honestly.</p>
+
+<p>To get unbiased ratings, I sampled $i$ uniformly randomly from 1 to 122222221. These endpoints roughly correspond to the birth of Goodreads to around September 2020. Then I obtained all the book ratings of this user. Rinse and repeat.</p>
+
+<p>I also needed a separate dataset consisting of book features. I collected all the books that my users rated and got shelf information about them. Shelves are user-created categories. Common ones are “read”, “fiction”, “religion”, etc. I figured these shelves carried interesting information about the book.</p>
+
+<p>In total, I had about 1M ratings and 300K books. For my purposes, I winnowed my books down to those that were rated by at least five of my users. This left me with 700K ratings and 30K books.</p>
+
+<h1 id="the-model">The Model</h1>
+
+<p>After collecting the data, I need a model to predict books that a user will like but haven’t read yet. I used a modified version of the ALS recommendation algorithm, which I will describe below.</p>
+
+<p>The following regressor will take any user-book pair as input and give a rating prediction. There are two parts to this regressor: the baseline model and the residual model. The final model will simply combined the two like so: ++ \text{model}(\text{user}, \text{book}) = \text{baseline}(\text{user}, \text{book}) + \text{residual}(\text{user}, \text{book}). ++</p>
+
+<h2 id="the-baseline-model">The Baseline Model</h2>
+
+<p>The baseline model is a rough initial guess for the rating of a user-book pair <em>without taking into account user-book interaction</em>. The baseline model looks like ++ \text{baseline}(\text{user}, \text{book}) = \mu + f(\text{user}) + g(\text{book}). ++ Roughly, the baseline model is finding the mean rating and calculating how much each user deviates from it on average, and how much each book deviates from it on average. Specifically, I just one-hot encode the users and books, then perform ridge regression. I tried a couple of other things but simple is good here.</p>
+
+<p>Note that if we rank the books for each fixed user, the rankings will be identical. There is no personalization here. This is simply setting the scene for personalization.</p>
+
+<h2 id="the-residual-model">The Residual Model</h2>
+<p>This is where we get to model the user-book interaction and open up the model to personalization. First, let’s talk about the book feature data.</p>
+
+<p>The raw data I collected is a json file of books and their top 100 shelves. Because we don’t care about every single user-defined category, I selected the top 500 most popular shelves and filtered out all other shelves. So I have a json file which roughly looks like this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{'1234': {
+    'read': 2834,
+    'fiction': 1093,
+    'fantasy': 990,
+    'coming-of-age': 93
+    },
+ '1235': {...},
+ ...
+}
+</code></pre></div></div>
+<p>Here, 1234 and 1235 are book ids. I divided each bookshelf count by the sum of the bookshelf counts and included a total bookshelf count as a feature. Then I took the log of each feature, which seemed to improve performance by a significant amount. Then I centered and scaled my data and put it in a matrix $M$, whose rows correspond to features and columns correspond to books. I have 500 rows at this point, but a lot of these shelves are redundant (e.g. “young-adult” and “ya”), so I used PCA to reduce to 75 rows.</p>
+
+<p>Now I must learn my user preferences. I initialize a matrix $U$ whose rows correspond to learned features and columns correspond to users. The matrix $UM$ will tell us the deviation from the baseline model that we should predict. For example, suppose books only had two features: ‘fiction’ and ‘fantasy’. Suppose a certain user, Alice, really likes both fiction and fantasy books. Say their coefficient for ‘fiction’ is $0.3$ and for fantasy is $0.5$. Let’s predict their rating for a book which has ‘fiction’ value $0.9$ and ‘fantasy’ value $1.2$ (maybe this book is Harry Potter and the Sorcerer’s Stone). The prediction would be ++ \text{model}(\text{Alice}, \text{HPSS}) = \text{baseline}(\text{Alice}, \text{HPSS}) + [0.3 ~ 0.5] \begin{bmatrix}0.9 \\ 1.2\end{bmatrix}. ++ So we’d have  ++ \text{model}(\text{Alice}, \text{HPSS}) = \text{baseline}(\text{Alice}, \text{HPSS}) + 0.87. ++</p>
+
+<p>If we collect all users and all books, then we get two matrices which look like this: ++ U = \begin{bmatrix} \vdots &amp; \vdots \\ 0.3 &amp; 0.5 \\ \vdots &amp; \vdots \end{bmatrix}, \quad M = \begin{bmatrix} \dots &amp; 0.9 &amp; \dots \\ \dots &amp; 1.2 &amp; \dots \end{bmatrix}. ++</p>
+
+<p>And the residual model would consist of getting the correct row (user) and column (book) from the product matrix $UM$: ++ \text{residual}(\text{user}, \text{book}) = (UM)_{i,j}. ++</p>
+
+<p>The user preference matrix $U$ must be learned from the data. The classical setting is that the book feature matrix must be learned as well, which poses a difficulty since two matrices must be learned simultaneously while the loss depends on their product.</p>
+
+<p>In our case, it turns out that the bookshelves provide a lot of information! So I actually haave <em>two</em> residual models.</p>
+<ol>
+  <li>The first gets the optimal user preference matrix $U_1$, with a fixed book feature matrix $M_1$ derived from the bookshelf data. This is a single linear regression.</li>
+  <li>The second, on top of the first, learns the optimal user preference matrix $U_2$ and the book feature matrix $M_2$ simultaneously. The training process is called the <em>Alternating Least Squares (ALS) method</em>. The idea is that we fix $U_2$ and find the optimal $M_2$, then fix $M_2$ and update $U_2$, and so on until convergence.</li>
+</ol>
+
+<p>The final model is the sum of the baseline model and the two residual models.</p>
+
+<h1 id="training">Training</h1>
+
+<p>Here we have a graphic comparing training and testing errors of our models. One thing to keep in mind for my application is that <em>we are not necessarily looking for the lowest testing error</em>. The model with the lowest test error I could get actually didn’t give me very meaningful predictions. It just suggested quite highly rated popular books, no matter what data I inputted. In this case, it helped to have a little bit of overfitting. The model I used in the application is the overfit model. The best-performing model is the standard model, which had a 4.5% improvement over the baseline model. The error here is mean squared error.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Model</th>
+      <th>Train Error</th>
+      <th>Test Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Naive mean predictor</td>
+      <td>0.986</td>
+      <td>0.986</td>
+    </tr>
+    <tr>
+      <td>Baseline model</td>
+      <td>0.664</td>
+      <td>0.748</td>
+    </tr>
+    <tr>
+      <td>Standard model</td>
+      <td>0.516</td>
+      <td>0.714</td>
+    </tr>
+    <tr>
+      <td>Overfit model</td>
+      <td>0.132</td>
+      <td>0.778</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/assets/book-rec-1/errors.png" alt="1" /></p>
+
+<h1 id="clustering">Clustering</h1>
+<p>The intermediate products $U_1$ and $M_1$ of my model actually may be interesting to look at. We might be able to visualize some structure in our user and book data.</p>
+
+<p>Let’s learn the matrices $U_1$ and $M_1$ with two dimensions. So when we do PCA on $M_1$, we will set $d=2$ and correspondingly $U_1$ will have two columns. We train with the usual hyperparameters otherwise, then we can plot $M_1$ to visualize how users rate books.</p>
+
+<p>Below, we have such a chart. You can click and drag on the user side (ux, uy) to isolate a certain user or users, then see which books they rated on the book side (bx, by).</p>
+
+<iframe src="/assets/book-rec-1/chart.html" title="User/Book interaction" height="500px" width="1000px"></iframe>
+
+<p>The users on the lower left seem to be the ones with harsher ratings (one of them seems to have exclusively assigned ratings of value 1) and the ones on the upper right seem to be more generous. Theoretically this should’ve been taken care of with the baseline model, but with the regularization, the residual model also plays a part in shifting the mean of the user.</p>
+
+<p>Some users seem to have preferences for books in a certain area, for example the rightmost user.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>I set out to recommend books to users based on their preferences. I collected data from Goodreads and built a 3-part model. The baseline model was a simple linear model, and the next residual model predicted the residual from the book features that I collected from Goodreads. The last residual model predicted the residual from learned user and book features. Again, you can see the app <a href="https://bookending.herokuapp.com">here</a>.</p>
+
+
+  </div><a class="u-url" href="/2020/12/06/book-rec-1.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Hong Suh</li>
+          <li><a class="u-email" href="mailto:hong.suh7@gmail.com">hong.suh7@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>A collection of math topics with lots of pictures and animations!
+</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

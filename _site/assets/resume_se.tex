@@ -1,7 +1,7 @@
 % LaTeX resume using res.cls
 \documentclass{simplecv}
 
-\usepackage[top = 0.3in, bottom = 0.3in, left = 0.5in, right = 0.5in]{geometry}
+\usepackage[top = 0.5in, bottom = 0.5in, left = 0.5in, right = 0.5in]{geometry}
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{color, hyperref,comment,multicol}
 \def\Z{{\mathbb{Z}}}
@@ -56,7 +56,7 @@ Coursework: Fundamentals of CS (functional programming), Data Structures \& Algo
 \section{SKILLS}
 \noindent {\it Programming:} Python, R, SQL, Java, Mathematica
 
-\noindent {\it Tools/Packages:} PyTorch, TensorFlow, scikit-learn, PySpark, NumPy, Pandas, tidyverse, Plotly
+\noindent {\it Tools/Packages:} PyTorch, scikit-learn, NumPy, CuPy, Pandas, tidyverse, Plotly
 
 \noindent {\it Theory:} Deep Learning, Machine Learning, Probability, Numerical Differential Equations, Data Structures, Algorithms
 
@@ -69,32 +69,23 @@ Coursework: Fundamentals of CS (functional programming), Data Structures \& Algo
 \section{SELECT PROJECTS}
 
 \begin{itemize}
-  \item[$\diamond$] {\it Book recommendation web app.} (Capstone project at The Data Incubator) \hfill September -- November 2020
-  \begin{itemize}
-    \itemsep0em
-    \item Designed and implemented a pipeline that ingests data from 1M+ user ratings over 300K+ books from Goodreads.
-    \item Built and trained an ALS recommender system on a 300MB+ dataset using {\bf scikit-learn}.
-    \item Deployed a Flask web application for users to obtain book recommendations in real time.
-  \end{itemize}
-
   \item[$\diamond$] {\it Tennis win prediction model.} (Individual project) \hfill March -- August 2020 %(tech: Python, CuPy, plotly)
   \begin{itemize}
-    \itemsep0em
     \item Designed and implemented a prediction model for professional tennis player matchups using {\bf Pandas, NumPy}.
     \item Eliminated human supervision by automating hyperparameter selection using GPU optimization with {\bf CuPy}.
     \item Decreased log-loss error by about {\bf 1.5\%} compared to FiveThirtyEight's model.
-    %\item Created interactive graphics for users to experiment with predictions using {\bf Plotly}.
+    \item Created interactive graphics for users to experiment with predictions using {\bf Plotly}.
     %\item {\it Results.} Historically, hyperparameters have been hand-picked in Elo rating systems. Taking advantage of parallelization, I developed a tennis-specific model which automates hyperparameter selection. This model decreased log-loss error by about 1.5\% compared to FiveThirtyEight's model.
   \end{itemize}
 
-  %\item[$\diamond$] {\it Neural network model for image classification and generation.} (Individual project) \hfill June -- August 2020 %(tech: PyTorch, R)
-  %\begin{itemize}
-  %  \item Developed a new normalizing flow architecture using masked convolutions and a modified {\bf neural ODE (NODE)} model for image generation using {\bf PyTorch} and Google Colab.%, achieving a bits-per-pixel metric of {\bf 100000} on the MNIST dataset.  %new high-performance neural network architecture for image classification and generation, modifying the methodology in recent normalizing flow papers.
-  %  \item Conducted rigorous statistical tests on my modified NODE classifier model with {\bf adversarial training} to demonstrate its training speed-up and similar adversarial robustness compared to the vanilla NODE model.
+  \item[$\diamond$] {\it Neural network model for image classification and generation.} (Individual project) \hfill June -- August 2020 %(tech: PyTorch, R)
+  \begin{itemize}
+    \item Developed a new normalizing flow architecture using masked convolutions and a modified {\bf neural ODE (NODE)} model for image generation using {\bf PyTorch} and Google Colab.%, achieving a bits-per-pixel metric of {\bf 100000} on the MNIST dataset.  %new high-performance neural network architecture for image classification and generation, modifying the methodology in recent normalizing flow papers.
+    \item Conducted rigorous statistical tests on my modified NODE classifier model with {\bf adversarial training} to demonstrate its training speed-up and similar adversarial robustness compared to the vanilla NODE model.
     %\item Deployed application for users to interact with the deep generative image model.
     %\item Reduced computational cost for image generation using Neural ODEs by {\bf \textcolor{red}{x percent}} \textcolor{red}{while maintaining quality}.%Reduce computational cost of Neural ODEs, a neural network model, which are the legacy best in-class models for image generation. 
     %\item Created an interactive application to visualize the image generation process.%{\it Results.} Neural ODEs (NODEs) are the legacy best normalizing flow models for image generation, but they require high computational cost. I developed a new type of neural network inspired by NODEs that lowered computational cost by {\bf \textcolor{red}{x percent}} and can be used as a replacement for NODEs in image generation.
-  %\end{itemize}
+  \end{itemize}
 \end{itemize}
 
 \vspace{-0.4cm}
@@ -104,13 +95,7 @@ Coursework: Fundamentals of CS (functional programming), Data Structures \& Algo
 \vspace{-0.4cm}
 
 \section{EXPERIENCE}
-{\bf Data Science Fellow} \hfill September -- November 2020 \\
-The Data Incubator, San Francisco, CA
-\begin{itemize}
-  \itemsep0em
-  \item[$\diamond$] Completed projects involving distributed computing, SQL, classical machine learning, deep learning, and more using real-world datasets as large as 10GB.
-\end{itemize}
-{\bf Math Teacher} \hfill June 2019 -- June 2020 \\
+{\bf Math Teacher (grades 6-12)} \hfill June 2019 -- June 2020 \\
 Proof School, San Francisco, CA
 \begin{itemize}
   \itemsep0em 

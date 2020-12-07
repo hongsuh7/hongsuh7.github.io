@@ -8,6 +8,13 @@ This is the homepage and blog of Hong Suh. Below is my portfolio; other informat
 
 <hr>
 
+# A Book Recommendation System
+
+## [post](https://hongsuh7.github.io/2020/12/06/book-rec-1.html), [app](https://bookending.herokuapp.com)
+I built a book recommendation system in which you can input books you like and dislike, and the app recommends some books for you. Check it out!
+
+<hr>
+
 # A Generalized Elo System for Tennis Players
 ## [repo](https://github.com/hongsuh7/tennis-elo), [post 1](https://hongsuh7.github.io/2020/07/07/tennis-1.html), [post 2](https://hongsuh7.github.io/2020/08/13/tennis-2.html), [post 3 (graphics)](https://hongsuh7.github.io/2020/08/26/tennis-3.html)
 I built a generalized Elo rating system for tennis players which improves upon the model presented by [FiveThirtyEight](https://fivethirtyeight.com/features/serena-williams-and-the-difference-between-all-time-great-and-greatest-of-all-time/). The improvements are as follows.

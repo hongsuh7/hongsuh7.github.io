@@ -8,15 +8,15 @@
 <meta property="og:title" content="A Generalized Elo System for Tennis Players, part 2" />
 <meta name="author" content="Hong Suh" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account." />
-<meta property="og:description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account." />
+<meta name="description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter." />
+<meta property="og:description" content="In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter." />
 <link rel="canonical" href="http://localhost:4000/2020/08/13/tennis-2.html" />
 <meta property="og:url" content="http://localhost:4000/2020/08/13/tennis-2.html" />
 <meta property="og:site_name" content="In All Probably" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-13T00:00:00-07:00" />
 <script type="application/ld+json">
-{"headline":"A Generalized Elo System for Tennis Players, part 2","dateModified":"2020-08-13T00:00:00-07:00","datePublished":"2020-08-13T00:00:00-07:00","url":"http://localhost:4000/2020/08/13/tennis-2.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/13/tennis-2.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.","@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"headline":"A Generalized Elo System for Tennis Players, part 2","dateModified":"2020-08-13T00:00:00-07:00","datePublished":"2020-08-13T00:00:00-07:00","url":"http://localhost:4000/2020/08/13/tennis-2.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/13/tennis-2.html"},"author":{"@type":"Person","name":"Hong Suh"},"description":"In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter.","@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="In All Probably" /><!-- Enables MathJax 
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
@@ -68,9 +68,13 @@ window.MathJax = {
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</p>
+    <p>In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter.</p>
 
 <!--more-->
+
+<p>This is part 2 of a 3-part series. Here is <a href="https://hongsuh7.github.io/2020/07/07/tennis-1.html">part 1</a> and <a href="https://hongsuh7.github.io/2020/08/26/tennis-3.html">part 3</a>. All of the code I wrote for this project is <a href="https://github.com/hongsuh7/tennis-elo">here</a>.</p>
+
+<p>There are a few ways in which surface has been taken into account.</p>
 
 <ol>
   <li><em>(Surface-only)</em> Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.</li>

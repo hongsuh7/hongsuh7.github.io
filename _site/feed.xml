@@ -1,7 +1,126 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-26T15:44:58-07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">In All Probably</title><subtitle>A collection of math topics with lots of pictures and animations!
-</subtitle><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><entry><title type="html">A Generalized Elo System for Tennis Players, Graphics</title><link href="http://localhost:4000/2020/08/26/tennis-3.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, Graphics" /><published>2020-08-26T00:00:00-07:00</published><updated>2020-08-26T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/26/tennis-3</id><content type="html" xml:base="http://localhost:4000/2020/08/26/tennis-3.html">&lt;p&gt;Here is a graphic of the Big Four (Federer, Nadal, Djokovic, Murray) ratings according to my &lt;a href=&quot;https://hongsuh7.github.io/2020/08/13/tennis-2.html&quot;&gt;Elo system&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-12-06T18:11:27-08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">In All Probably</title><subtitle>A collection of math topics with lots of pictures and animations!
+</subtitle><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><entry><title type="html">Bookender: A Book Recommendation System</title><link href="http://localhost:4000/2020/12/06/book-rec-1.html" rel="alternate" type="text/html" title="Bookender: A Book Recommendation System" /><published>2020-12-06T00:00:00-08:00</published><updated>2020-12-06T00:00:00-08:00</updated><id>http://localhost:4000/2020/12/06/book-rec-1</id><content type="html" xml:base="http://localhost:4000/2020/12/06/book-rec-1.html">&lt;p&gt;I built a &lt;a href=&quot;https://bookending.herokuapp.com&quot;&gt;book recommendation system&lt;/a&gt; over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it.&lt;/p&gt;
 
 &lt;!--more--&gt;
+
+&lt;h1 id=&quot;design&quot;&gt;Design&lt;/h1&gt;
+
+&lt;p&gt;I wanted to build something lightweight for two reasons: first, it’s easier to build; and second, I use Goodreads and, while it has everything it needs to make good recommendations, it’s too clunky for that purpose and so I don’t use it for recs.&lt;/p&gt;
+
+&lt;p&gt;My app would simply take a list of liked and disliked books from the user and return a list of recommendations after some optional user filtering. Pretty simple.&lt;/p&gt;
+
+&lt;h1 id=&quot;data&quot;&gt;Data&lt;/h1&gt;
+
+&lt;p&gt;First, I needed lots of user rating data and book data. Thankfully, the horrible design of Goodreads makes it fairly easy to collect these data. The url &lt;code class=&quot;highlighter-rouge&quot;&gt;https://www.goodreads.com/user/show/{i}&lt;/code&gt; gives you information about the $i$th user. And it’s chronological. Can’t believe they did that honestly.&lt;/p&gt;
+
+&lt;p&gt;To get unbiased ratings, I sampled $i$ uniformly randomly from 1 to 122222221. These endpoints roughly correspond to the birth of Goodreads to around September 2020. Then I obtained all the book ratings of this user. Rinse and repeat.&lt;/p&gt;
+
+&lt;p&gt;I also needed a separate dataset consisting of book features. I collected all the books that my users rated and got shelf information about them. Shelves are user-created categories. Common ones are “read”, “fiction”, “religion”, etc. I figured these shelves carried interesting information about the book.&lt;/p&gt;
+
+&lt;p&gt;In total, I had about 1M ratings and 300K books. For my purposes, I winnowed my books down to those that were rated by at least five of my users. This left me with 700K ratings and 30K books.&lt;/p&gt;
+
+&lt;h1 id=&quot;the-model&quot;&gt;The Model&lt;/h1&gt;
+
+&lt;p&gt;After collecting the data, I need a model to predict books that a user will like but haven’t read yet. I used a modified version of the ALS recommendation algorithm, which I will describe below.&lt;/p&gt;
+
+&lt;p&gt;The following regressor will take any user-book pair as input and give a rating prediction. There are two parts to this regressor: the baseline model and the residual model. The final model will simply combined the two like so: ++ \text{model}(\text{user}, \text{book}) = \text{baseline}(\text{user}, \text{book}) + \text{residual}(\text{user}, \text{book}). ++&lt;/p&gt;
+
+&lt;h2 id=&quot;the-baseline-model&quot;&gt;The Baseline Model&lt;/h2&gt;
+
+&lt;p&gt;The baseline model is a rough initial guess for the rating of a user-book pair &lt;em&gt;without taking into account user-book interaction&lt;/em&gt;. The baseline model looks like ++ \text{baseline}(\text{user}, \text{book}) = \mu + f(\text{user}) + g(\text{book}). ++ Roughly, the baseline model is finding the mean rating and calculating how much each user deviates from it on average, and how much each book deviates from it on average. Specifically, I just one-hot encode the users and books, then perform ridge regression. I tried a couple of other things but simple is good here.&lt;/p&gt;
+
+&lt;p&gt;Note that if we rank the books for each fixed user, the rankings will be identical. There is no personalization here. This is simply setting the scene for personalization.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-residual-model&quot;&gt;The Residual Model&lt;/h2&gt;
+&lt;p&gt;This is where we get to model the user-book interaction and open up the model to personalization. First, let’s talk about the book feature data.&lt;/p&gt;
+
+&lt;p&gt;The raw data I collected is a json file of books and their top 100 shelves. Because we don’t care about every single user-defined category, I selected the top 500 most popular shelves and filtered out all other shelves. So I have a json file which roughly looks like this:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;{'1234': {
+    'read': 2834,
+    'fiction': 1093,
+    'fantasy': 990,
+    'coming-of-age': 93
+    },
+ '1235': {...},
+ ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Here, 1234 and 1235 are book ids. I divided each bookshelf count by the sum of the bookshelf counts and included a total bookshelf count as a feature. Then I took the log of each feature, which seemed to improve performance by a significant amount. Then I centered and scaled my data and put it in a matrix $M$, whose rows correspond to features and columns correspond to books. I have 500 rows at this point, but a lot of these shelves are redundant (e.g. “young-adult” and “ya”), so I used PCA to reduce to 75 rows.&lt;/p&gt;
+
+&lt;p&gt;Now I must learn my user preferences. I initialize a matrix $U$ whose rows correspond to learned features and columns correspond to users. The matrix $UM$ will tell us the deviation from the baseline model that we should predict. For example, suppose books only had two features: ‘fiction’ and ‘fantasy’. Suppose a certain user, Alice, really likes both fiction and fantasy books. Say their coefficient for ‘fiction’ is $0.3$ and for fantasy is $0.5$. Let’s predict their rating for a book which has ‘fiction’ value $0.9$ and ‘fantasy’ value $1.2$ (maybe this book is Harry Potter and the Sorcerer’s Stone). The prediction would be ++ \text{model}(\text{Alice}, \text{HPSS}) = \text{baseline}(\text{Alice}, \text{HPSS}) + [0.3 ~ 0.5] \begin{bmatrix}0.9 \\ 1.2\end{bmatrix}. ++ So we’d have  ++ \text{model}(\text{Alice}, \text{HPSS}) = \text{baseline}(\text{Alice}, \text{HPSS}) + 0.87. ++&lt;/p&gt;
+
+&lt;p&gt;If we collect all users and all books, then we get two matrices which look like this: ++ U = \begin{bmatrix} \vdots &amp;amp; \vdots \\ 0.3 &amp;amp; 0.5 \\ \vdots &amp;amp; \vdots \end{bmatrix}, \quad M = \begin{bmatrix} \dots &amp;amp; 0.9 &amp;amp; \dots \\ \dots &amp;amp; 1.2 &amp;amp; \dots \end{bmatrix}. ++&lt;/p&gt;
+
+&lt;p&gt;And the residual model would consist of getting the correct row (user) and column (book) from the product matrix $UM$: ++ \text{residual}(\text{user}, \text{book}) = (UM)_{i,j}. ++&lt;/p&gt;
+
+&lt;p&gt;The user preference matrix $U$ must be learned from the data. The classical setting is that the book feature matrix must be learned as well, which poses a difficulty since two matrices must be learned simultaneously while the loss depends on their product.&lt;/p&gt;
+
+&lt;p&gt;In our case, it turns out that the bookshelves provide a lot of information! So I actually haave &lt;em&gt;two&lt;/em&gt; residual models.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;The first gets the optimal user preference matrix $U_1$, with a fixed book feature matrix $M_1$ derived from the bookshelf data. This is a single linear regression.&lt;/li&gt;
+  &lt;li&gt;The second, on top of the first, learns the optimal user preference matrix $U_2$ and the book feature matrix $M_2$ simultaneously. The training process is called the &lt;em&gt;Alternating Least Squares (ALS) method&lt;/em&gt;. The idea is that we fix $U_2$ and find the optimal $M_2$, then fix $M_2$ and update $U_2$, and so on until convergence.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The final model is the sum of the baseline model and the two residual models.&lt;/p&gt;
+
+&lt;h1 id=&quot;training&quot;&gt;Training&lt;/h1&gt;
+
+&lt;p&gt;Here we have a graphic comparing training and testing errors of our models. One thing to keep in mind for my application is that &lt;em&gt;we are not necessarily looking for the lowest testing error&lt;/em&gt;. The model with the lowest test error I could get actually didn’t give me very meaningful predictions. It just suggested quite highly rated popular books, no matter what data I inputted. In this case, it helped to have a little bit of overfitting. The model I used in the application is the overfit model. The best-performing model is the standard model, which had a 4.5% improvement over the baseline model. The error here is mean squared error.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Model&lt;/th&gt;
+      &lt;th&gt;Train Error&lt;/th&gt;
+      &lt;th&gt;Test Error&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Naive mean predictor&lt;/td&gt;
+      &lt;td&gt;0.986&lt;/td&gt;
+      &lt;td&gt;0.986&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Baseline model&lt;/td&gt;
+      &lt;td&gt;0.664&lt;/td&gt;
+      &lt;td&gt;0.748&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Standard model&lt;/td&gt;
+      &lt;td&gt;0.516&lt;/td&gt;
+      &lt;td&gt;0.714&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Overfit model&lt;/td&gt;
+      &lt;td&gt;0.132&lt;/td&gt;
+      &lt;td&gt;0.778&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/book-rec-1/errors.png&quot; alt=&quot;1&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;clustering&quot;&gt;Clustering&lt;/h1&gt;
+&lt;p&gt;The intermediate products $U_1$ and $M_1$ of my model actually may be interesting to look at. We might be able to visualize some structure in our user and book data.&lt;/p&gt;
+
+&lt;p&gt;Let’s learn the matrices $U_1$ and $M_1$ with two dimensions. So when we do PCA on $M_1$, we will set $d=2$ and correspondingly $U_1$ will have two columns. We train with the usual hyperparameters otherwise, then we can plot $M_1$ to visualize how users rate books.&lt;/p&gt;
+
+&lt;p&gt;Below, we have such a chart. You can click and drag on the user side (ux, uy) to isolate a certain user or users, then see which books they rated on the book side (bx, by).&lt;/p&gt;
+
+&lt;iframe src=&quot;/assets/book-rec-1/chart.html&quot; title=&quot;User/Book interaction&quot; height=&quot;500px&quot; width=&quot;1000px&quot;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;The users on the lower left seem to be the ones with harsher ratings (one of them seems to have exclusively assigned ratings of value 1) and the ones on the upper right seem to be more generous. Theoretically this should’ve been taken care of with the baseline model, but with the regularization, the residual model also plays a part in shifting the mean of the user.&lt;/p&gt;
+
+&lt;p&gt;Some users seem to have preferences for books in a certain area, for example the rightmost user.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;I set out to recommend books to users based on their preferences. I collected data from Goodreads and built a 3-part model. The baseline model was a simple linear model, and the next residual model predicted the residual from the book features that I collected from Goodreads. The last residual model predicted the residual from learned user and book features. Again, you can see the app &lt;a href=&quot;https://bookending.herokuapp.com&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">I built a book recommendation system over the past few months as my capstone project for a data science bootcamp, The Data Incubator. If you’d like to read more about my experience there, I’m planning to write about that as well and I’ll include a link here when I do. In this post, I’ll outline the structure of my recommendation system and write about my experience building it.</summary></entry><entry><title type="html">A Generalized Elo System for Tennis Players, Graphics</title><link href="http://localhost:4000/2020/08/26/tennis-3.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, Graphics" /><published>2020-08-26T00:00:00-07:00</published><updated>2020-08-26T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/26/tennis-3</id><content type="html" xml:base="http://localhost:4000/2020/08/26/tennis-3.html">&lt;p&gt;Here is a graphic of the Big Four (Federer, Nadal, Djokovic, Murray) ratings according to my &lt;a href=&quot;https://hongsuh7.github.io/2020/08/13/tennis-2.html&quot;&gt;Elo system&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;This is part 3 of a 3-part series. Here is &lt;a href=&quot;https://hongsuh7.github.io/2020/07/07/tennis-1.html&quot;&gt;part 1&lt;/a&gt; and &lt;a href=&quot;https://hongsuh7.github.io/2020/08/13/tennis-2.html&quot;&gt;part 2&lt;/a&gt;. All of the code I wrote for this project is &lt;a href=&quot;https://github.com/hongsuh7/tennis-elo&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;iframe src=&quot;/assets/tennis-3/big4.html&quot; title=&quot;Big Four Ratings&quot; height=&quot;600px&quot; width=&quot;750px&quot;&gt;&lt;/iframe&gt;
 
@@ -10,74 +129,13 @@
   &lt;li&gt;A surface rating should not be compared with a different surface rating because it’s not guaranteed that each surface rating has a similar mean across all players. Just because Nadal’s clay rating is higher than his hard court rating doesn’t mean he is better at clay, though indeed his clay rating is higher than his hard rating and indeed he is better at clay than hard.&lt;/li&gt;
   &lt;li&gt;Elo ratings actually probably do a relatively poor job of predicting matches for players as elite as the Big Four. For example, everyone knows Nadal’s at a different level when it comes to clay, but his clay rating is not that much higher than the others’ ratings. You can actually see when the clay season is, because his clay rating shoots up during clay season then falls down during the other seasons. For basically all other players on earth, the non-clay season performances are good predictors of clay season performance, which is why the Elo system adapted this way. But not for Nadal.&lt;/li&gt;
   &lt;li&gt;When players don’t play matches, their rating stays the same. Since Andy Murray hasn’t played many matches since his injury, his rating is inflated; it hasn’t caught up with his injury yet. It would be interesting to augment this simple prediction model with increasing layers of data, such as injury data.&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">Here is a graphic of the Big Four (Federer, Nadal, Djokovic, Murray) ratings according to my Elo system.</summary></entry><entry><title type="html">A Visual Introduction to Interacting Particle Systems</title><link href="http://localhost:4000/2020/08/13/particles-1.html" rel="alternate" type="text/html" title="A Visual Introduction to Interacting Particle Systems" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/particles-1</id><content type="html" xml:base="http://localhost:4000/2020/08/13/particles-1.html">&lt;p&gt;An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">Here is a graphic of the Big Four (Federer, Nadal, Djokovic, Murray) ratings according to my Elo system.</summary></entry><entry><title type="html">A Generalized Elo System for Tennis Players, part 2</title><link href="http://localhost:4000/2020/08/13/tennis-2.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, part 2" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/tennis-2</id><content type="html" xml:base="http://localhost:4000/2020/08/13/tennis-2.html">&lt;p&gt;In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter.&lt;/p&gt;
 
 &lt;!--more--&gt;
 
-&lt;h2 id=&quot;one-particle-system&quot;&gt;One Particle System&lt;/h2&gt;
+&lt;p&gt;This is part 2 of a 3-part series. Here is &lt;a href=&quot;https://hongsuh7.github.io/2020/07/07/tennis-1.html&quot;&gt;part 1&lt;/a&gt; and &lt;a href=&quot;https://hongsuh7.github.io/2020/08/26/tennis-3.html&quot;&gt;part 3&lt;/a&gt;. All of the code I wrote for this project is &lt;a href=&quot;https://github.com/hongsuh7/tennis-elo&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Suppose you have one particle on the integer number line. You flip a coin, and if it’s heads, the particle jumps left; if it’s tails, the particle stays. Keep flipping coins. This simple one-particle-model looks like this when simulated. The $t$ denotes the $t$th coin flip, and the variable $t$ stands for time.&lt;/p&gt;
-
-&lt;p align=&quot;center&quot;&gt;
-  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_onedot.gif&quot; /&gt;
-&lt;/p&gt;
-
-&lt;p&gt;The main question we ask is: &lt;strong&gt;what is the long-term behavior of the particle?&lt;/strong&gt; By “long-term,” I mean: if a long time passes, what can we say about where the particle is?&lt;/p&gt;
-
-&lt;p&gt;Suppose the starting point of the particle is zero. At time $t$, the position of the particle is ++ p(t) = -(X_1 + X_2  +\cdots + X_t), ++ where ++ X_i =\begin{cases}
-  1 &amp;amp;\quad \text{if heads} \\
-  0 &amp;amp;\quad \text{if tails}
-\end{cases} ++
-represents the result of the $i$th coin flip. This formula gives us all that we can possibly know about the long-term behavior of $p(t)$ because sums of independent coin flips are possibly the most-studied object in probability.&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;We know, for example, that ++ \lim_{t\to \infty} \frac{p(t)}{t} = \frac{-1}{2}, ++ where the limit is interpreted in basically any fashion.&lt;/li&gt;
-  &lt;li&gt;We also know that ++ \frac{p(t) + t/2}{\sqrt{t}/2} \text{ is approximately } N(0,1), ++ the standard normal distribution. &lt;!--More precisely, \[ P\left( a &lt; \frac{p(t) + t/2}{\sqrt{t}/2}&lt; b \right) \approx \frac{1}{\sqrt{2\pi}}\int_a^b e^{-x^2/2} \ dx,  \] where $P$ denotes probability. --&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The first of these is called the &lt;em&gt;Law of Large Numbers (LLN)&lt;/em&gt;, and the second is called the &lt;em&gt;Central Limit Theorem (CLT)&lt;/em&gt;. They are cornerstones of probability theory.&lt;/p&gt;
-
-&lt;h2 id=&quot;many-particle-system-with-interaction&quot;&gt;Many-particle system with interaction&lt;/h2&gt;
-&lt;p&gt;With one particle on the number line, classical probability theory can easily answer any question about the long-term behavior of the system. What if there are many particles on the number line?&lt;/p&gt;
-
-&lt;p&gt;If there are many particles and the particles can pass through one another without consequence, then each particle behaves independently of the others. We effectively get many copies of the one-particle system explored in the previous section.&lt;/p&gt;
-
-&lt;p&gt;In our physical world, particles interact with one another. They bounce off of each other like billiards balls, or they might attract or repel one another. The simplest model for particle repulsion is to disallow particles occupying the same space.&lt;/p&gt;
-
-&lt;p&gt;Let’s expand our single-particle system to accommodate many particles. Each particle has a coin above it which gets flipped at every time step. All the coins flip simultaneously. If the coin lands heads, the corresponding particle &lt;em&gt;tries&lt;/em&gt; to jump one spot to the left. However, if the left-neighboring spot is occupied, the particle &lt;em&gt;does not jump&lt;/em&gt;. If the coin lands head &lt;strong&gt;and&lt;/strong&gt; the left-neighoring spot is unoccupied, the particles jumps left.&lt;/p&gt;
-
-&lt;p align=&quot;center&quot;&gt;
-  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_dots.gif&quot; /&gt;
-&lt;/p&gt;
-
-&lt;p&gt;This simple particle interaction rule adds a ton of complexity to the model. This model is called the totally asymmetric simple exlusion process (TASEP). “Totally asymmetric” because particles only jump to the left, “exclusion” because we exclude particles occupying the same position, and “simple” because… it’s the simplest of these kind of interacting particle systems?&lt;/p&gt;
-
-&lt;p&gt;The resolution of the analogue of the CLT for particle systems like these is an enormous challenge in probability. LLN is generally easier and verified for larger classes of particle systems, but the CLT is very difficult, and only resolved in specific models like TASEP. And even for TASEP, there is a lot to discover about its fluctuations in the CLT realm.&lt;/p&gt;
-
-&lt;h2 id=&quot;height-function&quot;&gt;Height function&lt;/h2&gt;
-
-&lt;p&gt;One of the simplest initial configurations to start with is the “wedge” initial condition, displayed in the animation above. In the setting where particles are only jumping to the left, this means that every site to the right of and including zero is occupied, while every site to the left of zero is unoccupied. Another simple initial condition is the one in which each site is occupied with probability $p$, and all sites are independent of one another. To obtain a full understanding of TASEP, we need to consider both initial conditions. And in fact, all other possible initial conditions can sort of be boiled down to these I think. For us, we will only look at the wedge initial condition.&lt;/p&gt;
-
-&lt;p&gt;To study the dynamics, we introduce a height function corresponding to the system, which helps us analyze it. We begin with the wedge initial condition. The {\emph height function} $h(x,t)$ associated with the particle system is a function which counts the number of particles strictly to the right of $x$ at time $t$. This means that the height function starts at $h(x,0) = \max(0,x)$, which represents the wedge initial condition, and each time a particle jumps from $x$ to $x-1$, then $h(x,t)$ increments by one. Here is what $h(x,t)$ would look like as time passes.&lt;/p&gt;
-
-&lt;p align=&quot;center&quot;&gt;
-  &lt;img width=&quot;480&quot; height=&quot;360&quot; src=&quot;/assets/particles-1/tasep1.gif&quot; /&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Remember that we want to study the long-term dynamics of $h(x,t)$. Just as we do for LLN when we study $X_1+X_2+\cdots+X_n$ the sum of $n$ iid random variables, we must scale by an appropriate factor while letting $t\to\infty$. The correct scaling is ++ \lim_{\epsilon \to 0} \epsilon h\left(\frac{x}{\epsilon}, \frac{t}{\epsilon}\right). ++ Essentially, when $\epsilon \to 0$, we are zooming out and speeding up time at such a rate so that we get an interesting function at the end of the limit. Here is what that would look like.&lt;/p&gt;
-
-&lt;p align=&quot;center&quot;&gt;
-  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_scale.gif&quot; /&gt;
-&lt;/p&gt;
-
-&lt;p&gt;You can observe that while the microscopic dynamics are random, the macroscopic dynamics seem to be converging to a deterministic function! This is LLN for this particle system. We see it in this animation, but proving it is another matter.&lt;/p&gt;
-
-&lt;p&gt;You might ask, what is CLT for this particle system? It is very complicated and I myself have only barely touched the tip of the iceberg here. The analogue of the Gaussian distribution is various distributions related to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Kardar–Parisi–Zhang_equation&quot;&gt;KPZ equation&lt;/a&gt;. TASEP is one of the simplest models in the “KPZ universality class,” which is loosely defined as a class of models for which the fluctuations are expected to follow the same distributions that the KPZ equation exhibits.&lt;/p&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;We will hopefully get to the kinds of things I investigated in my graduate studies. I looked at a generalization of TASEP whose fluctuations are unknown (but expected to be in the KPZ class) and derived some bounds for the fluctuations. More to come.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</summary></entry><entry><title type="html">A Generalized Elo System for Tennis Players, part 2</title><link href="http://localhost:4000/2020/08/13/tennis-2.html" rel="alternate" type="text/html" title="A Generalized Elo System for Tennis Players, part 2" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/tennis-2</id><content type="html" xml:base="http://localhost:4000/2020/08/13/tennis-2.html">&lt;p&gt;In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.&lt;/p&gt;
-
-&lt;!--more--&gt;
+&lt;p&gt;There are a few ways in which surface has been taken into account.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;&lt;em&gt;(Surface-only)&lt;/em&gt; Treat each surface as a different sport altogether, so that each player has three ratings that don’t interact with one another.&lt;/li&gt;
@@ -178,7 +236,72 @@ represents the result of the $i$th coin flip. This formula gives us all that we 
 &lt;p&gt;The 0.603 is actually a little smaller than ours, by 0.0005. So it’s a little bit of a bummer that this rather ad-hoc method does as well as our more principled method. But that’s just life.&lt;/p&gt;
 
 &lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;The SA+SO model still uses my hyperparameter principles from the previous notebook, and it fits quite nicely into the mathematical framework I’ve made here. If I could search for parameters like a thousand times faster, I might try to optimize for a weighted average of probabilities from two matrices, to get results like the above. With our current parameter search, we can’t find this local min because neither matrix by itself does well, but averaged together they do well. Doing this larger parameter search, we’d need to search through, in all probably, millions of parameters, which doesn’t seem all that bad, in the context of all the deep learning stuff I’m doing recently. We might even be able to do a little bit of gradient descent (which I tried earlier but it didn’t work because the loss function was so rough in the parameter space and uniformly chosen parameters all did fairly well – in this case, uniformly chosen parameters do very badly so gradient descent might work initially). So next up, I’m going to load this up in Google Colab and see if I can run it.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter. There are a few ways in which surface has been taken into account.</summary></entry><entry><title type="html">Testing Robustness of Neural ODEs against Adversarial Attacks</title><link href="http://localhost:4000/2020/07/22/neural-ode-robustness.html" rel="alternate" type="text/html" title="Testing Robustness of Neural ODEs against Adversarial Attacks" /><published>2020-07-22T00:00:00-07:00</published><updated>2020-07-22T00:00:00-07:00</updated><id>http://localhost:4000/2020/07/22/neural-ode-robustness</id><content type="html" xml:base="http://localhost:4000/2020/07/22/neural-ode-robustness.html">&lt;p&gt;In my &lt;a href=&quot;https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html&quot;&gt;last post&lt;/a&gt;, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper &lt;a href=&quot;https://arxiv.org/pdf/1910.05513.pdf&quot;&gt;On Robustness of Neural Ordinary Differential Equations&lt;/a&gt; (Yan et al).&lt;/p&gt;
+&lt;p&gt;The SA+SO model still uses my hyperparameter principles from the previous notebook, and it fits quite nicely into the mathematical framework I’ve made here. If I could search for parameters like a thousand times faster, I might try to optimize for a weighted average of probabilities from two matrices, to get results like the above. With our current parameter search, we can’t find this local min because neither matrix by itself does well, but averaged together they do well. Doing this larger parameter search, we’d need to search through, in all probably, millions of parameters, which doesn’t seem all that bad, in the context of all the deep learning stuff I’m doing recently. We might even be able to do a little bit of gradient descent (which I tried earlier but it didn’t work because the loss function was so rough in the parameter space and uniformly chosen parameters all did fairly well – in this case, uniformly chosen parameters do very badly so gradient descent might work initially). So next up, I’m going to load this up in Google Colab and see if I can run it.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">In this notebook, we will take our previous Elo system for tennis players and add playing surface as a parameter.</summary></entry><entry><title type="html">A Visual Introduction to Interacting Particle Systems</title><link href="http://localhost:4000/2020/08/13/particles-1.html" rel="alternate" type="text/html" title="A Visual Introduction to Interacting Particle Systems" /><published>2020-08-13T00:00:00-07:00</published><updated>2020-08-13T00:00:00-07:00</updated><id>http://localhost:4000/2020/08/13/particles-1</id><content type="html" xml:base="http://localhost:4000/2020/08/13/particles-1.html">&lt;p&gt;An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;one-particle-system&quot;&gt;One Particle System&lt;/h2&gt;
+
+&lt;p&gt;Suppose you have one particle on the integer number line. You flip a coin, and if it’s heads, the particle jumps left; if it’s tails, the particle stays. Keep flipping coins. This simple one-particle-model looks like this when simulated. The $t$ denotes the $t$th coin flip, and the variable $t$ stands for time.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_onedot.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The main question we ask is: &lt;strong&gt;what is the long-term behavior of the particle?&lt;/strong&gt; By “long-term,” I mean: if a long time passes, what can we say about where the particle is?&lt;/p&gt;
+
+&lt;p&gt;Suppose the starting point of the particle is zero. At time $t$, the position of the particle is ++ p(t) = -(X_1 + X_2  +\cdots + X_t), ++ where ++ X_i =\begin{cases}
+  1 &amp;amp;\quad \text{if heads} \\
+  0 &amp;amp;\quad \text{if tails}
+\end{cases} ++
+represents the result of the $i$th coin flip. This formula gives us all that we can possibly know about the long-term behavior of $p(t)$ because sums of independent coin flips are possibly the most-studied object in probability.&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;We know, for example, that ++ \lim_{t\to \infty} \frac{p(t)}{t} = \frac{-1}{2}, ++ where the limit is interpreted in basically any fashion.&lt;/li&gt;
+  &lt;li&gt;We also know that ++ \frac{p(t) + t/2}{\sqrt{t}/2} \text{ is approximately } N(0,1), ++ the standard normal distribution. &lt;!--More precisely, \[ P\left( a &lt; \frac{p(t) + t/2}{\sqrt{t}/2}&lt; b \right) \approx \frac{1}{\sqrt{2\pi}}\int_a^b e^{-x^2/2} \ dx,  \] where $P$ denotes probability. --&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The first of these is called the &lt;em&gt;Law of Large Numbers (LLN)&lt;/em&gt;, and the second is called the &lt;em&gt;Central Limit Theorem (CLT)&lt;/em&gt;. They are cornerstones of probability theory.&lt;/p&gt;
+
+&lt;h2 id=&quot;many-particle-system-with-interaction&quot;&gt;Many-particle system with interaction&lt;/h2&gt;
+&lt;p&gt;With one particle on the number line, classical probability theory can easily answer any question about the long-term behavior of the system. What if there are many particles on the number line?&lt;/p&gt;
+
+&lt;p&gt;If there are many particles and the particles can pass through one another without consequence, then each particle behaves independently of the others. We effectively get many copies of the one-particle system explored in the previous section.&lt;/p&gt;
+
+&lt;p&gt;In our physical world, particles interact with one another. They bounce off of each other like billiards balls, or they might attract or repel one another. The simplest model for particle repulsion is to disallow particles occupying the same space.&lt;/p&gt;
+
+&lt;p&gt;Let’s expand our single-particle system to accommodate many particles. Each particle has a coin above it which gets flipped at every time step. All the coins flip simultaneously. If the coin lands heads, the corresponding particle &lt;em&gt;tries&lt;/em&gt; to jump one spot to the left. However, if the left-neighboring spot is occupied, the particle &lt;em&gt;does not jump&lt;/em&gt;. If the coin lands head &lt;strong&gt;and&lt;/strong&gt; the left-neighoring spot is unoccupied, the particles jumps left.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_dots.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This simple particle interaction rule adds a ton of complexity to the model. This model is called the totally asymmetric simple exlusion process (TASEP). “Totally asymmetric” because particles only jump to the left, “exclusion” because we exclude particles occupying the same position, and “simple” because… it’s the simplest of these kind of interacting particle systems?&lt;/p&gt;
+
+&lt;p&gt;The resolution of the analogue of the CLT for particle systems like these is an enormous challenge in probability. LLN is generally easier and verified for larger classes of particle systems, but the CLT is very difficult, and only resolved in specific models like TASEP. And even for TASEP, there is a lot to discover about its fluctuations in the CLT realm.&lt;/p&gt;
+
+&lt;h2 id=&quot;height-function&quot;&gt;Height function&lt;/h2&gt;
+
+&lt;p&gt;One of the simplest initial configurations to start with is the “wedge” initial condition, displayed in the animation above. In the setting where particles are only jumping to the left, this means that every site to the right of and including zero is occupied, while every site to the left of zero is unoccupied. Another simple initial condition is the one in which each site is occupied with probability $p$, and all sites are independent of one another. To obtain a full understanding of TASEP, we need to consider both initial conditions. And in fact, all other possible initial conditions can sort of be boiled down to these I think. For us, we will only look at the wedge initial condition.&lt;/p&gt;
+
+&lt;p&gt;To study the dynamics, we introduce a height function corresponding to the system, which helps us analyze it. We begin with the wedge initial condition. The {\emph height function} $h(x,t)$ associated with the particle system is a function which counts the number of particles strictly to the right of $x$ at time $t$. This means that the height function starts at $h(x,0) = \max(0,x)$, which represents the wedge initial condition, and each time a particle jumps from $x$ to $x-1$, then $h(x,t)$ increments by one. Here is what $h(x,t)$ would look like as time passes.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;360&quot; src=&quot;/assets/particles-1/tasep1.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Remember that we want to study the long-term dynamics of $h(x,t)$. Just as we do for LLN when we study $X_1+X_2+\cdots+X_n$ the sum of $n$ iid random variables, we must scale by an appropriate factor while letting $t\to\infty$. The correct scaling is ++ \lim_{\epsilon \to 0} \epsilon h\left(\frac{x}{\epsilon}, \frac{t}{\epsilon}\right). ++ Essentially, when $\epsilon \to 0$, we are zooming out and speeding up time at such a rate so that we get an interesting function at the end of the limit. Here is what that would look like.&lt;/p&gt;
+
+&lt;p align=&quot;center&quot;&gt;
+  &lt;img width=&quot;480&quot; height=&quot;320&quot; src=&quot;/assets/particles-1/tasep_scale.gif&quot; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;You can observe that while the microscopic dynamics are random, the macroscopic dynamics seem to be converging to a deterministic function! This is LLN for this particle system. We see it in this animation, but proving it is another matter.&lt;/p&gt;
+
+&lt;p&gt;You might ask, what is CLT for this particle system? It is very complicated and I myself have only barely touched the tip of the iceberg here. The analogue of the Gaussian distribution is various distributions related to the &lt;a href=&quot;https://en.wikipedia.org/wiki/Kardar–Parisi–Zhang_equation&quot;&gt;KPZ equation&lt;/a&gt;. TASEP is one of the simplest models in the “KPZ universality class,” which is loosely defined as a class of models for which the fluctuations are expected to follow the same distributions that the KPZ equation exhibits.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;We will hopefully get to the kinds of things I investigated in my graduate studies. I looked at a generalization of TASEP whose fluctuations are unknown (but expected to be in the KPZ class) and derived some bounds for the fluctuations. More to come.&lt;/p&gt;</content><author><name>Hong Suh</name><email>hong.suh7@gmail.com</email></author><summary type="html">An interacting particle system is a stochastic process in which particles randomly move around as time passes with certain exclusion rules. Here, we explain some problems and ideas in interacting particle systems literature.</summary></entry><entry><title type="html">Testing Robustness of Neural ODEs against Adversarial Attacks</title><link href="http://localhost:4000/2020/07/22/neural-ode-robustness.html" rel="alternate" type="text/html" title="Testing Robustness of Neural ODEs against Adversarial Attacks" /><published>2020-07-22T00:00:00-07:00</published><updated>2020-07-22T00:00:00-07:00</updated><id>http://localhost:4000/2020/07/22/neural-ode-robustness</id><content type="html" xml:base="http://localhost:4000/2020/07/22/neural-ode-robustness.html">&lt;p&gt;In my &lt;a href=&quot;https://hongsuh7.github.io/2020/07/17/neural-ode-intro.html&quot;&gt;last post&lt;/a&gt;, I wrote an introduction to Neural ODEs. I made a simple network with one processing layer, one ODE layer, and one fully connected layer. In this post, I will compare the robustness of this model (which we call an “ODENet”) to regular ResNets. We see a statistically significant improvement against adversarial attacks when switching from ResNets to ODENets. However, the difference is quite small. This exploration was informed by the paper &lt;a href=&quot;https://arxiv.org/pdf/1910.05513.pdf&quot;&gt;On Robustness of Neural Ordinary Differential Equations&lt;/a&gt; (Yan et al).&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -686,8 +809,7 @@ test(odenet)
 
 &lt;!--more--&gt;
 
-&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
-&lt;p&gt;All of the code I wrote for this project is &lt;a href=&quot;https://github.com/hongsuh7/tennis-elo/blob/master/elo1.ipynb&quot;&gt;here&lt;/a&gt;, with similar text.&lt;/p&gt;
+&lt;p&gt;This is part 1 of a 3-part series. Here is &lt;a href=&quot;https://hongsuh7.github.io/2020/08/13/tennis-2.html&quot;&gt;part 2&lt;/a&gt; and &lt;a href=&quot;https://hongsuh7.github.io/2020/08/26/tennis-3.html&quot;&gt;part 3&lt;/a&gt;. All of the code I wrote for this project is &lt;a href=&quot;https://github.com/hongsuh7/tennis-elo&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
 &lt;p&gt;The Elo rating system is designed to assign ratings to players which reflect their true strength at the game. Players are assigned an initial rating of 1. Before a match between two players, the system outputs a probability that one wins. After the match, the system updates each player’s rating according to their previous ratings and the result of the match.&lt;/p&gt;
